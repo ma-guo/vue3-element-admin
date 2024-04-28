@@ -7,7 +7,7 @@ const numberValue = ref(1); // 性别(值为Number)
 <template>
   <div class="app-container">
     <el-link
-      href="https://gitee.com/youlaiorg/vue3-element-admin/blob/master/src/views/demo/dict.vue"
+      href="https://github.com/ma-guo/vue3-element-admin/blob/master/src/views/demo/dict.vue"
       type="primary"
       target="_blank"
       class="mb-[20px]"

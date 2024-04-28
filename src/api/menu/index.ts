@@ -7,7 +7,7 @@ import { MenuQuery, MenuVO, MenuForm } from "./types";
  */
 export function listRoutes() {
   return request({
-    url: "/api/v1/menus/routes",
+    url: "/api/v1/menus/routes/",
     method: "get",
   });
 }
@@ -17,9 +17,11 @@ export function listRoutes() {
  *
  * @param queryParams
  */
-export function listMenus(queryParams: MenuQuery): AxiosPromise<MenuVO[]> {
+export function listMenus(
+  queryParams: MenuQuery
+): AxiosPromise<CommArray<MenuVO>> {
   return request({
-    url: "/api/v1/menus",
+    url: "/api/v1/menus/list/",
     method: "get",
     params: queryParams,
   });
@@ -28,9 +30,9 @@ export function listMenus(queryParams: MenuQuery): AxiosPromise<MenuVO[]> {
 /**
  * 获取菜单下拉树形列表
  */
-export function getMenuOptions(): AxiosPromise<OptionType[]> {
+export function getMenuOptions(): AxiosPromise<OptionTypeWrap> {
   return request({
-    url: "/api/v1/menus/options",
+    url: "/api/v1/menus/options/",
     method: "get",
   });
 }
@@ -42,8 +44,9 @@ export function getMenuOptions(): AxiosPromise<OptionType[]> {
  */
 export function getMenuForm(id: number): AxiosPromise<MenuForm> {
   return request({
-    url: "/api/v1/menus/" + id + "/form",
+    url: "/api/v1/menus/form/",
     method: "get",
+    params: { id },
   });
 }
 
@@ -54,7 +57,7 @@ export function getMenuForm(id: number): AxiosPromise<MenuForm> {
  */
 export function addMenu(data: MenuForm) {
   return request({
-    url: "/api/v1/menus",
+    url: "/api/v1/menus/add/",
     method: "post",
     data: data,
   });
@@ -68,9 +71,9 @@ export function addMenu(data: MenuForm) {
  */
 export function updateMenu(id: string, data: MenuForm) {
   return request({
-    url: "/api/v1/menus/" + id,
-    method: "put",
-    data: data,
+    url: "/api/v1/menus/update/",
+    method: "post",
+    data: { ...data, id },
   });
 }
 
@@ -79,9 +82,10 @@ export function updateMenu(id: string, data: MenuForm) {
  *
  * @param id 菜单ID
  */
-export function deleteMenu(id: number) {
+export function deleteMenu(ids: number) {
   return request({
-    url: "/api/v1/menus/" + id,
-    method: "delete",
+    url: "/api/v1/menus/delete/",
+    method: "post",
+    data: { ids },
   });
 }

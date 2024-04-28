@@ -77,4 +77,7 @@
   "i18n-ally.localesPaths": [
     "src/lang"
   ],
+  "[typescript]": {
+    "editor.defaultFormatter": "vscode.typescript-language-features"
+  },
 }

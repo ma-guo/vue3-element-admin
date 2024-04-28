@@ -114,7 +114,7 @@ onMounted(() => {
 <template>
   <div class="app-container">
     <el-link
-      href="https://gitee.com/youlaiorg/vue3-element-admin/blob/master/src/views/demo/websocket.vue"
+      href="https://github.com/ma-guo/vue3-element-admin/blob/master/src/views/demo/websocket.vue"
       type="primary"
       target="_blank"
       class="mb-[20px]"

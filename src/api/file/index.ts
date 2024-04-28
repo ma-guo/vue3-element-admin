@@ -11,7 +11,7 @@ export function uploadFileApi(file: File): AxiosPromise<FileInfo> {
   const formData = new FormData();
   formData.append("file", file);
   return request({
-    url: "/api/v1/files",
+    url: "/api/v1/files/upload/",
     method: "post",
     data: formData,
     headers: {
@@ -27,8 +27,8 @@ export function uploadFileApi(file: File): AxiosPromise<FileInfo> {
  */
 export function deleteFileApi(filePath?: string) {
   return request({
-    url: "/api/v1/files",
-    method: "delete",
+    url: "/api/v1/files/delete/",
+    method: "post",
     params: { filePath: filePath },
   });
 }

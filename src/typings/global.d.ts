@@ -82,5 +82,12 @@ declare global {
     /** 子列表  */
     children?: OptionType[];
   }
+
+  interface OptionTypeWrap {
+    items: OptionType[];
+  }
+  interface CommArray<T> {
+    items: T[];
+  }
 }
 export {};

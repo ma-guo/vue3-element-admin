@@ -8,7 +8,7 @@ const value = ref("初始内容");
 <template>
   <div class="app-container">
     <el-link
-      href="https://gitee.com/youlaiorg/vue3-element-admin/blob/master/src/views/demo/wang-editor.vue"
+      href="https://github.com/ma-guo/vue3-element-admin/blob/master/src/views/demo/wang-editor.vue"
       type="primary"
       target="_blank"
       class="mb-[20px]"

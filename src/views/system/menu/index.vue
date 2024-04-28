@@ -378,7 +378,7 @@ function handleQuery() {
   loading.value = true;
   listMenus(queryParams)
     .then(({ data }) => {
-      menuList.value = data;
+      menuList.value = data.items;
     })
     .then(() => {
       loading.value = false;
@@ -405,7 +405,9 @@ function onRowClick(row: MenuVO) {
 function openDialog(parentId?: number, menuId?: number) {
   getMenuOptions()
     .then(({ data }) => {
-      menuOptions.value = [{ value: 0, label: "顶级菜单", children: data }];
+      menuOptions.value = [
+        { value: 0, label: "顶级菜单", children: data.items },
+      ];
     })
     .then(() => {
       dialog.visible = true;

@@ -63,7 +63,7 @@ function handleNodeClick(data: { [key: string]: any }) {
 
 onBeforeMount(() => {
   getDeptOptions().then((response) => {
-    deptList.value = response.data;
+    deptList.value = response.data.items;
   });
 });
 </script>

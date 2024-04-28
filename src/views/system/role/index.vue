@@ -359,11 +359,11 @@ function openMenuDialog(row: RolePageVO) {
 
     // 获取所有的菜单
     getMenuOptions().then((response) => {
-      menuList.value = response.data;
+      menuList.value = response.data.items;
       // 回显角色已拥有的菜单
       getRoleMenuIds(roleId)
         .then(({ data }) => {
-          const checkedMenuIds = data;
+          const checkedMenuIds = data.items;
           checkedMenuIds.forEach((menuId) =>
             menuRef.value.setChecked(menuId, true, false)
           );

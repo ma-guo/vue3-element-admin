@@ -18,7 +18,7 @@ const multiPicUrls = ref([
 <template>
   <div class="app-container">
     <el-link
-      href="https://gitee.com/youlaiorg/vue3-element-admin/blob/master/src/views/demo/upload.vue"
+      href="https://github.com/ma-guo/vue3-element-admin/blob/master/src/views/demo/upload.vue"
       type="primary"
       target="_blank"
       class="mb-10"

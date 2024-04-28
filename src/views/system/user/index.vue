@@ -467,14 +467,14 @@ function resetPassword(row: { [key: string]: any }) {
 /** 加载角色下拉数据源 */
 async function loadRoleOptions() {
   getRoleOptions().then((response) => {
-    roleList.value = response.data;
+    roleList.value = response.data.items;
   });
 }
 
 /** 加载部门下拉数据源 */
 async function loadDeptOptions() {
   getDeptOptions().then((response) => {
-    deptList.value = response.data;
+    deptList.value = response.data.items;
   });
 }
 

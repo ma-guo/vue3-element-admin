@@ -67,7 +67,7 @@ function handleChange(val?: string | number | undefined) {
 onBeforeMount(() => {
   // 根据字典类型编码(typeCode)获取字典选项
   getDictOptions(props.typeCode).then((response) => {
-    options.value = response.data;
+    options.value = response.data.items;
   });
 });
 </script>

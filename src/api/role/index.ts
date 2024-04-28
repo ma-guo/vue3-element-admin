@@ -11,7 +11,7 @@ export function getRolePage(
   queryParams?: RoleQuery
 ): AxiosPromise<RolePageResult> {
   return request({
-    url: "/api/v1/roles/page",
+    url: "/api/v1/roles/page/",
     method: "get",
     params: queryParams,
   });
@@ -24,9 +24,9 @@ export function getRolePage(
  */
 export function getRoleOptions(
   queryParams?: RoleQuery
-): AxiosPromise<OptionType[]> {
+): AxiosPromise<OptionTypeWrap> {
   return request({
-    url: "/api/v1/roles/options",
+    url: "/api/v1/roles/options/",
     method: "get",
     params: queryParams,
   });
@@ -37,10 +37,13 @@ export function getRoleOptions(
  *
  * @param queryParams
  */
-export function getRoleMenuIds(roleId: number): AxiosPromise<number[]> {
+export function getRoleMenuIds(
+  roleId: number
+): AxiosPromise<CommArray<number>> {
   return request({
-    url: "/api/v1/roles/" + roleId + "/menuIds",
+    url: "/api/v1/roles/menuids/",
     method: "get",
+    params: { roleId },
   });
 }
 
@@ -54,9 +57,9 @@ export function updateRoleMenus(
   data: number[]
 ): AxiosPromise<any> {
   return request({
-    url: "/api/v1/roles/" + roleId + "/menus",
-    method: "put",
-    data: data,
+    url: "/api/v1/roles/menus/",
+    method: "post",
+    data: { menuIds: data, roleId },
   });
 }
 
@@ -67,8 +70,9 @@ export function updateRoleMenus(
  */
 export function getRoleForm(id: number): AxiosPromise<RoleForm> {
   return request({
-    url: "/api/v1/roles/" + id + "/form",
+    url: "/api/v1/roles/form/",
     method: "get",
+    params: { id },
   });
 }
 
@@ -79,7 +83,7 @@ export function getRoleForm(id: number): AxiosPromise<RoleForm> {
  */
 export function addRole(data: RoleForm) {
   return request({
-    url: "/api/v1/roles",
+    url: "/api/v1/roles/add/",
     method: "post",
     data: data,
   });
@@ -93,9 +97,9 @@ export function addRole(data: RoleForm) {
  */
 export function updateRole(id: number, data: RoleForm) {
   return request({
-    url: "/api/v1/roles/" + id,
-    method: "put",
-    data: data,
+    url: "/api/v1/roles/update/",
+    method: "post",
+    data: { ...data, id },
   });
 }
 
@@ -106,7 +110,8 @@ export function updateRole(id: number, data: RoleForm) {
  */
 export function deleteRoles(ids: string) {
   return request({
-    url: "/api/v1/roles/" + ids,
-    method: "delete",
+    url: "/api/v1/roles/delete/",
+    method: "post",
+    data: { ids },
   });
 }

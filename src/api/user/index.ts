@@ -7,7 +7,7 @@ import { UserForm, UserInfo, UserPageVO, UserQuery } from "./types";
  */
 export function getUserInfoApi(): AxiosPromise<UserInfo> {
   return request({
-    url: "/api/v1/users/me",
+    url: "/api/v1/users/me/",
     method: "get",
   });
 }
@@ -21,7 +21,7 @@ export function getUserPage(
   queryParams: UserQuery
 ): AxiosPromise<PageResult<UserPageVO[]>> {
   return request({
-    url: "/api/v1/users/page",
+    url: "/api/v1/users/page/",
     method: "get",
     params: queryParams,
   });
@@ -34,8 +34,9 @@ export function getUserPage(
  */
 export function getUserForm(userId: number): AxiosPromise<UserForm> {
   return request({
-    url: "/api/v1/users/" + userId + "/form",
+    url: "/api/v1/users/form/",
     method: "get",
+    params: { userId: userId },
   });
 }
 
@@ -46,7 +47,7 @@ export function getUserForm(userId: number): AxiosPromise<UserForm> {
  */
 export function addUser(data: any) {
   return request({
-    url: "/api/v1/users",
+    url: "/api/v1/users/",
     method: "post",
     data: data,
   });
@@ -60,9 +61,12 @@ export function addUser(data: any) {
  */
 export function updateUser(id: number, data: UserForm) {
   return request({
-    url: "/api/v1/users/" + id,
-    method: "put",
-    data: data,
+    url: "/api/v1/users/update/",
+    method: "post",
+    data: {
+      ...data,
+      id: id,
+    },
   });
 }
 
@@ -74,9 +78,9 @@ export function updateUser(id: number, data: UserForm) {
  */
 export function updateUserPassword(id: number, password: string) {
   return request({
-    url: "/api/v1/users/" + id + "/password",
-    method: "patch",
-    params: { password: password },
+    url: "/api/v1/users/password/",
+    method: "post",
+    params: { password, id },
   });
 }
 
@@ -87,8 +91,9 @@ export function updateUserPassword(id: number, password: string) {
  */
 export function deleteUsers(ids: string) {
   return request({
-    url: "/api/v1/users/" + ids,
-    method: "delete",
+    url: "/api/v1/users/delete/",
+    method: "post",
+    data: { ids },
   });
 }
 
