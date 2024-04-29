@@ -21,7 +21,7 @@
 </template>
 
 <script setup lang="ts">
-import { getDeptOptions } from "@/api/dept";
+import { getDeptOptions } from "@/api/admin/api";
 
 const props = defineProps({
   modelValue: {
@@ -30,7 +30,7 @@ const props = defineProps({
   },
 });
 
-const deptList = ref<OptionType[]>(); // 部门列表
+const deptList = ref<AdminCore.LongOptions[]>(); // 部门列表
 const deptTreeRef = ref(ElTree); // 部门树
 const deptName = ref(); // 部门名称
 
@@ -62,7 +62,7 @@ function handleNodeClick(data: { [key: string]: any }) {
 }
 
 onBeforeMount(() => {
-  getDeptOptions().then((response) => {
+  getDeptOptions({}).then((response) => {
     deptList.value = response.data.items;
   });
 });

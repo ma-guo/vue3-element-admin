@@ -182,17 +182,15 @@
 
 <script setup lang="ts">
 import {
-  getRolePage,
-  updateRole,
-  getRoleForm,
-  addRole,
-  deleteRoles,
-  getRoleMenuIds,
-  updateRoleMenus,
-} from "@/api/role";
-import { getMenuOptions } from "@/api/menu";
-
-import { RolePageVO, RoleForm, RoleQuery } from "@/api/role/types";
+  getMenusOptions,
+  getRolesForm,
+  getRolesMenuids,
+  getRolesPage,
+  setRolesAdd,
+  setRolesDelete,
+  setRolesMenus,
+  setRolesUpdate,
+} from "@/api/admin/api";
 
 defineOptions({
   name: "Role",
@@ -207,23 +205,26 @@ const loading = ref(false);
 const ids = ref<number[]>([]);
 const total = ref(0);
 
-const queryParams = reactive<RoleQuery>({
+const queryParams = reactive<AdminCore.V1RolesPageReq>({
+  keywords: "",
   pageNum: 1,
   pageSize: 10,
 });
 
-const roleList = ref<RolePageVO[]>();
+const roleList = ref<AdminCore.V1RolesItem[]>();
 
 const dialog = reactive({
   title: "",
   visible: false,
 });
 
-const formData = reactive<RoleForm>({
-  sort: 1,
-  status: 1,
-  code: "",
+const formData = reactive<AdminCore.V1RolesAddReq>({
+  id: 0,
   name: "",
+  code: "",
+  status: 1,
+  sort: 1,
+  dataScope: 0,
 });
 
 const rules = reactive({
@@ -246,7 +247,7 @@ let checkedRole: CheckedRole = reactive({});
 /** 查询 */
 function handleQuery() {
   loading.value = true;
-  getRolePage(queryParams)
+  getRolesPage(queryParams)
     .then(({ data }) => {
       roleList.value = data.list;
       total.value = data.total;
@@ -272,7 +273,7 @@ function openDialog(roleId?: number) {
   dialog.visible = true;
   if (roleId) {
     dialog.title = "修改角色";
-    getRoleForm(roleId).then(({ data }) => {
+    getRolesForm({ id: roleId }).then(({ data }) => {
       Object.assign(formData, data);
     });
   } else {
@@ -287,7 +288,7 @@ function handleSubmit() {
       loading.value = true;
       const roleId = formData.id;
       if (roleId) {
-        updateRole(roleId, formData)
+        setRolesUpdate(formData)
           .then(() => {
             ElMessage.success("修改成功");
             closeDialog();
@@ -295,7 +296,7 @@ function handleSubmit() {
           })
           .finally(() => (loading.value = false));
       } else {
-        addRole(formData)
+        setRolesAdd(formData)
           .then(() => {
             ElMessage.success("新增成功");
             closeDialog();
@@ -318,7 +319,7 @@ function resetForm() {
   roleFormRef.value.resetFields();
   roleFormRef.value.clearValidate();
 
-  formData.id = undefined;
+  formData.id = 0;
   formData.sort = 1;
   formData.status = 1;
 }
@@ -337,7 +338,7 @@ function handleDelete(roleId?: number) {
     type: "warning",
   }).then(() => {
     loading.value = true;
-    deleteRoles(roleIds)
+    setRolesDelete({ ids: roleIds })
       .then(() => {
         ElMessage.success("删除成功");
         resetQuery();
@@ -347,7 +348,7 @@ function handleDelete(roleId?: number) {
 }
 
 /** 打开分配菜单弹窗 */
-function openMenuDialog(row: RolePageVO) {
+function openMenuDialog(row: AdminCore.V1RolesItem) {
   const roleId = row.id;
   if (roleId) {
     checkedRole = {
@@ -358,10 +359,10 @@ function openMenuDialog(row: RolePageVO) {
     loading.value = true;
 
     // 获取所有的菜单
-    getMenuOptions().then((response) => {
+    getMenusOptions({}).then((response) => {
       menuList.value = response.data.items;
       // 回显角色已拥有的菜单
-      getRoleMenuIds(roleId)
+      getRolesMenuids({ roleId })
         .then(({ data }) => {
           const checkedMenuIds = data.items;
           checkedMenuIds.forEach((menuId) =>
@@ -384,7 +385,7 @@ function handleRoleMenuSubmit() {
       .map((node: any) => node.value);
 
     loading.value = true;
-    updateRoleMenus(roleId, checkedMenuIds)
+    setRolesMenus({ roleId, menuIds: checkedMenuIds })
       .then(() => {
         ElMessage.success("分配权限成功");
         menuDialogVisible.value = false;

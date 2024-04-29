@@ -120,7 +120,7 @@
               type="primary"
               link
               size="small"
-              @click.stop="openDialog(undefined, scope.row.id)"
+              @click.stop="openDialog(0, scope.row.id)"
             >
               <i-ep-edit />编辑
             </el-button>
@@ -317,17 +317,15 @@ defineOptions({
   inheritAttrs: false,
 });
 
-import { MenuQuery, MenuForm, MenuVO } from "@/api/menu/types";
-import {
-  listMenus,
-  getMenuForm,
-  getMenuOptions,
-  addMenu,
-  deleteMenu,
-  updateMenu,
-} from "@/api/menu";
-
 import { MenuTypeEnum } from "@/enums/MenuTypeEnum";
+import {
+  getMenusForm,
+  getMenusList,
+  getMenusOptions,
+  setMenusAdd,
+} from "@/api/admin/api";
+import { setMenusUpdate } from "@/api/admin/api";
+import { setMenusDelete } from "@/api/admin/api";
 
 const queryFormRef = ref(ElForm);
 const menuFormRef = ref(ElForm);
@@ -338,16 +336,27 @@ const dialog = reactive({
   visible: false,
 });
 
-const queryParams = reactive<MenuQuery>({});
-const menuList = ref<MenuVO[]>([]);
+const queryParams = reactive<AdminCore.V1MenusListReq>({
+  keywords: "",
+  status: 1,
+  type: 0,
+});
+const menuList = ref<AdminCore.MenuItem[]>([]);
 
 const menuOptions = ref<OptionType[]>([]);
 
-const formData = reactive<MenuForm>({
+const formData = reactive<AdminCore.V1MenusAddReq>({
+  id: 0,
   parentId: 0,
+  name: "",
+  type: MenuTypeEnum.MENU,
+  path: "",
+  component: "",
+  perm: "",
   visible: 1,
   sort: 1,
-  type: MenuTypeEnum.MENU,
+  icon: "",
+  redirect: "",
   alwaysShow: 0,
   keepAlive: 0,
 });
@@ -376,7 +385,7 @@ const menuCacheData = reactive({
 function handleQuery() {
   // 重置父组件
   loading.value = true;
-  listMenus(queryParams)
+  getMenusList(queryParams)
     .then(({ data }) => {
       menuList.value = data.items;
     })
@@ -392,7 +401,7 @@ function resetQuery() {
 }
 
 /**行点击事件 */
-function onRowClick(row: MenuVO) {
+function onRowClick(row: AdminCore.MenuItem) {
   selectedRowMenuId.value = row.id;
 }
 
@@ -402,8 +411,8 @@ function onRowClick(row: MenuVO) {
  * @param parentId 父菜单ID
  * @param menuId 菜单ID
  */
-function openDialog(parentId?: number, menuId?: number) {
-  getMenuOptions()
+function openDialog(parentId: number, menuId?: number) {
+  getMenusOptions({})
     .then(({ data }) => {
       menuOptions.value = [
         { value: 0, label: "顶级菜单", children: data.items },
@@ -413,7 +422,7 @@ function openDialog(parentId?: number, menuId?: number) {
       dialog.visible = true;
       if (menuId) {
         dialog.title = "编辑菜单";
-        getMenuForm(menuId).then(({ data }) => {
+        getMenusForm({ id: menuId }).then(({ data }) => {
           Object.assign(formData, data);
           menuCacheData.type = data.type;
           menuCacheData.path = data.path ?? "";
@@ -441,13 +450,13 @@ function submitForm() {
     if (isValid) {
       const menuId = formData.id;
       if (menuId) {
-        updateMenu(menuId, formData).then(() => {
+        setMenusUpdate(formData).then(() => {
           ElMessage.success("修改成功");
           closeDialog();
           handleQuery();
         });
       } else {
-        addMenu(formData).then(() => {
+        setMenusAdd(formData).then(() => {
           ElMessage.success("新增成功");
           closeDialog();
           handleQuery();
@@ -470,7 +479,7 @@ function handleDelete(menuId: number) {
     type: "warning",
   })
     .then(() => {
-      deleteMenu(menuId).then(() => {
+      setMenusDelete({ ids: [menuId].join(",") }).then(() => {
         ElMessage.success("删除成功");
         handleQuery();
       });
@@ -489,16 +498,19 @@ function resetForm() {
   menuFormRef.value.resetFields();
   menuFormRef.value.clearValidate();
 
-  formData.id = undefined;
+  formData.id = 0;
   formData.parentId = 0;
+  formData.name = "";
+  formData.type = MenuTypeEnum.MENU;
+  formData.path = "";
+  formData.component = "";
+  formData.perm = "";
   formData.visible = 1;
   formData.sort = 1;
-  formData.perm = undefined;
-  formData.component = undefined;
-  formData.path = undefined;
-  formData.redirect = undefined;
-  formData.alwaysShow = undefined;
-  formData.keepAlive = undefined;
+  formData.icon = "";
+  formData.redirect = "";
+  formData.alwaysShow = 0;
+  formData.keepAlive = 0;
 }
 
 onMounted(() => {

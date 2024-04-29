@@ -1,7 +1,7 @@
 import { RouteRecordRaw } from "vue-router";
 import { constantRoutes } from "@/router";
 import { store } from "@/store";
-import { listRoutes } from "@/api/menu";
+import { getMenusRoutes } from "@/api/admin/api";
 
 const modules = import.meta.glob("../../views/**/**.vue");
 const Layout = () => import("@/layout/index.vue");
@@ -85,10 +85,13 @@ export const usePermissionStore = defineStore("permission", () => {
   function generateRoutes(roles: string[]) {
     return new Promise<RouteRecordRaw[]>((resolve, reject) => {
       // 接口获取所有路由
-      listRoutes()
+      getMenusRoutes({})
         .then(({ data: asyncRoutes }) => {
           // 根据角色获取有访问权限的路由
-          const accessedRoutes = filterAsyncRoutes(asyncRoutes.items, roles);
+          const items = asyncRoutes.items.map((item): RouteRecordRaw => {
+            return JSON.parse(JSON.stringify(item));
+          });
+          const accessedRoutes = filterAsyncRoutes(items, roles);
           setRoutes(accessedRoutes);
           resolve(accessedRoutes);
         })

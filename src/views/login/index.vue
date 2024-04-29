@@ -115,8 +115,8 @@
 
 <script setup lang="ts">
 import { useSettingsStore, useUserStore } from "@/store";
-import { getCaptchaApi } from "@/api/auth";
-import { LoginData } from "@/api/auth/types";
+import { getAuthCaptcha } from "@/api/admin/api";
+
 import { Sunny, Moon } from "@element-plus/icons-vue";
 import { LocationQuery, LocationQueryValue, useRoute } from "vue-router";
 import router from "@/router";
@@ -138,11 +138,17 @@ const isCapslock = ref(false); // 是否大写锁定
 const captchaBase64 = ref(); // 验证码图片Base64字符串
 const loginFormRef = ref(ElForm); // 登录表单ref
 const { height } = useWindowSize();
-
-const loginData = ref<LoginData>({
+const loginData = ref<AdminCore.AuthLoginReq>({
   username: "admin",
   password: "123456",
+  captchaCode: "",
+  captchaKey: "",
 });
+
+const quer: PageQuery = {
+  pageNum: 1,
+  pageSize: 10,
+};
 
 const loginRules = computed(() => {
   return {
@@ -179,7 +185,7 @@ const loginRules = computed(() => {
  * 获取验证码
  */
 function getCaptcha() {
-  getCaptchaApi().then(({ data }) => {
+  getAuthCaptcha({}).then(({ data }) => {
     loginData.value.captchaKey = data.captchaKey;
     captchaBase64.value = data.captchaBase64;
   });

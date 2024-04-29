@@ -332,23 +332,20 @@ defineOptions({
   inheritAttrs: false,
 });
 
+import { downloadTemplateApi, exportUser, importUser } from "@/api/user";
 import {
-  getUserPage,
-  getUserForm,
-  deleteUsers,
-  addUser,
-  updateUser,
-  updateUserPassword,
-  downloadTemplateApi,
-  exportUser,
-  importUser,
-} from "@/api/user";
-import { getDeptOptions } from "@/api/dept";
-import { getRoleOptions } from "@/api/role";
+  getDeptOptions,
+  getRolesOptions,
+  getUsersForm,
+  getUsersPage,
+  setUsersAdd,
+} from "@/api/admin/api";
 
-import { UserForm, UserQuery, UserPageVO } from "@/api/user/types";
 import type { UploadInstance } from "element-plus";
 import { genFileId } from "element-plus";
+import { setUsersUpdate } from "@/api/admin/api";
+import { setUsersDelete } from "@/api/admin/api";
+import { setUsersPassword } from "@/api/admin/api";
 
 const queryFormRef = ref(ElForm); // 查询表单
 const userFormRef = ref(ElForm); // 用户表单
@@ -356,14 +353,19 @@ const uploadRef = ref<UploadInstance>(); // 上传组件
 
 const loading = ref(false); //  加载状态
 const removeIds = ref([]); // 删除用户ID集合 用于批量删除
-const queryParams = reactive<UserQuery>({
+const queryParams = reactive<AdminCore.V1UsersPageReq>({
+  keywords: "",
+  status: 1,
+  deptId: 0,
   pageNum: 1,
   pageSize: 10,
+  startTime: "",
+  endTime: "",
 });
 const dateTimeRange = ref("");
 const total = ref(0); // 数据总数
-const pageData = ref<UserPageVO[]>(); // 用户分页数据
-const deptList = ref<OptionType[]>(); // 部门下拉数据源
+const pageData = ref<AdminCore.V1UserPageItem[]>(); // 用户分页数据
+const deptList = ref<AdminCore.LongOptions[]>(); // 部门下拉数据源
 const roleList = ref<OptionType[]>(); // 角色下拉数据源
 
 watch(dateTimeRange, (newVal) => {
@@ -382,8 +384,18 @@ const dialog = reactive({
 });
 
 // 用户表单数据
-const formData = reactive<UserForm>({
+const formData = reactive<AdminCore.V1UsersAddReq>({
+  id: 0,
+  username: "",
+  nickname: "",
+  password: "",
+  mobile: "",
+  gender: 0,
+  avatar: "",
+  email: "",
   status: 1,
+  deptId: 0,
+  roleIds: [],
 });
 
 // 用户导入数据
@@ -418,7 +430,7 @@ const rules = reactive({
 /** 查询 */
 function handleQuery() {
   loading.value = true;
-  getUserPage(queryParams)
+  getUsersPage(queryParams)
     .then(({ data }) => {
       pageData.value = data.list;
       total.value = data.total;
@@ -433,9 +445,9 @@ function resetQuery() {
   queryFormRef.value.resetFields();
   dateTimeRange.value = "";
   queryParams.pageNum = 1;
-  queryParams.deptId = undefined;
-  queryParams.startTime = undefined;
-  queryParams.endTime = undefined;
+  queryParams.deptId = 0;
+  queryParams.startTime = "";
+  queryParams.endTime = "";
   handleQuery();
 }
 
@@ -458,7 +470,7 @@ function resetPassword(row: { [key: string]: any }) {
       ElMessage.warning("请输入新密码");
       return false;
     }
-    updateUserPassword(row.id, value).then(() => {
+    setUsersPassword({ userId: row.id, password: value }).then(() => {
       ElMessage.success("密码重置成功，新密码是：" + value);
     });
   });
@@ -466,14 +478,14 @@ function resetPassword(row: { [key: string]: any }) {
 
 /** 加载角色下拉数据源 */
 async function loadRoleOptions() {
-  getRoleOptions().then((response) => {
+  getRolesOptions({}).then((response) => {
     roleList.value = response.data.items;
   });
 }
 
 /** 加载部门下拉数据源 */
 async function loadDeptOptions() {
-  getDeptOptions().then((response) => {
+  getDeptOptions({}).then((response) => {
     deptList.value = response.data.items;
   });
 }
@@ -494,7 +506,7 @@ async function openDialog(type: string, id?: number) {
     await loadRoleOptions();
     if (id) {
       dialog.title = "修改用户";
-      getUserForm(id).then(({ data }) => {
+      getUsersForm({ userId: id }).then(({ data }) => {
         Object.assign(formData, { ...data });
       });
     } else {
@@ -519,7 +531,7 @@ function closeDialog() {
     userFormRef.value.resetFields();
     userFormRef.value.clearValidate();
 
-    formData.id = undefined;
+    formData.id = 0;
     formData.status = 1;
   } else if (dialog.type === "user-import") {
     importData.file = undefined;
@@ -535,7 +547,7 @@ const handleSubmit = useThrottleFn(() => {
         const userId = formData.id;
         loading.value = true;
         if (userId) {
-          updateUser(userId, formData)
+          setUsersUpdate(formData)
             .then(() => {
               ElMessage.success("修改用户成功");
               closeDialog();
@@ -543,7 +555,7 @@ const handleSubmit = useThrottleFn(() => {
             })
             .finally(() => (loading.value = false));
         } else {
-          addUser(formData)
+          setUsersAdd(formData)
             .then(() => {
               ElMessage.success("新增用户成功");
               closeDialog();
@@ -583,7 +595,7 @@ function handleDelete(id?: number) {
     cancelButtonText: "取消",
     type: "warning",
   }).then(function () {
-    deleteUsers(userIds).then(() => {
+    setUsersDelete({ ids: userIds }).then(() => {
       ElMessage.success("删除成功");
       resetQuery();
     });

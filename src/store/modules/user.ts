@@ -1,10 +1,8 @@
-import { loginApi, logoutApi } from "@/api/auth";
-import { getUserInfoApi } from "@/api/user";
 import { resetRouter } from "@/router";
 import { store } from "@/store";
 
-import { LoginData } from "@/api/auth/types";
 import { UserInfo } from "@/api/user/types";
+import { getUsersMe, setAuthLogin, setAuthLogout } from "@/api/admin/api";
 
 export const useUserStore = defineStore("user", () => {
   const user = ref<UserInfo>({
@@ -15,15 +13,16 @@ export const useUserStore = defineStore("user", () => {
   /**
    * 登录
    *
-   * @param {LoginData}
+   * @param {AdminCore.AuthLoginReq}
    * @returns
    */
-  function login(loginData: LoginData) {
+  function login(loginData: AdminCore.AuthLoginReq) {
     return new Promise<void>((resolve, reject) => {
-      loginApi(loginData)
+      setAuthLogin(loginData)
         .then((response) => {
           const { tokenType, accessToken } = response.data;
-          localStorage.setItem("accessToken", tokenType + " " + accessToken); // Bearer eyJhbGciOiJIUzI1NiJ9.xxx.xxx
+          // Bearer eyJhbGciOiJIUzI1NiJ9.xxx.xxx
+          localStorage.setItem("accessToken", tokenType + " " + accessToken);
           resolve();
         })
         .catch((error) => {
@@ -35,7 +34,7 @@ export const useUserStore = defineStore("user", () => {
   // 获取信息(用户昵称、头像、角色集合、权限集合)
   function getUserInfo() {
     return new Promise<UserInfo>((resolve, reject) => {
-      getUserInfoApi()
+      getUsersMe({})
         .then(({ data }) => {
           if (!data) {
             reject("Verification failed, please Login again.");
@@ -57,7 +56,7 @@ export const useUserStore = defineStore("user", () => {
   // user logout
   function logout() {
     return new Promise<void>((resolve, reject) => {
-      logoutApi()
+      setAuthLogout({})
         .then(() => {
           localStorage.setItem("accessToken", "");
           location.reload(); // 清空路由

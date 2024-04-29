@@ -149,14 +149,12 @@
 
 <script setup lang="ts">
 import {
-  getDictTypePage,
-  getDictTypeForm,
-  addDictType,
-  updateDictType,
-  deleteDictTypes,
-} from "@/api/dict";
-
-import { DictTypePageVO, DictTypeQuery, DictTypeForm } from "@/api/dict/types";
+  getDictTypesForm,
+  getDictTypesPage,
+  setDictTypesAdd,
+  setDictTypesDelete,
+  setDictTypesUpdate,
+} from "@/api/admin/api";
 
 defineOptions({
   name: "DictType",
@@ -170,20 +168,25 @@ const loading = ref(false);
 const ids = ref<number[]>([]);
 const total = ref(0);
 
-const queryParams = reactive<DictTypeQuery>({
+const queryParams = reactive<AdminCore.V1DictTypesPageReq>({
+  keywords: "",
   pageNum: 1,
   pageSize: 10,
 });
 
-const dictTypeList = ref<DictTypePageVO[]>();
+const dictTypeList = ref<AdminCore.V1DictTypesItem[]>();
 
 const dialog = reactive({
   title: "",
   visible: false,
 });
 
-const formData = reactive<DictTypeForm>({
+const formData = reactive<AdminCore.V1DictTypesAddReq>({
+  id: 0,
+  name: "",
+  code: "",
   status: 1,
+  remark: "",
 });
 
 const rules = reactive({
@@ -194,7 +197,7 @@ const rules = reactive({
 /** 查询 */
 function handleQuery() {
   loading.value = true;
-  getDictTypePage(queryParams)
+  getDictTypesPage(queryParams)
     .then(({ data }) => {
       dictTypeList.value = data.list;
       total.value = data.total;
@@ -227,7 +230,7 @@ function openDialog(dicTypeId?: number) {
   dialog.visible = true;
   if (dicTypeId) {
     dialog.title = "修改字典类型";
-    getDictTypeForm(dicTypeId).then(({ data }) => {
+    getDictTypesForm({ id: dicTypeId }).then(({ data }) => {
       Object.assign(formData, data);
     });
   } else {
@@ -242,7 +245,7 @@ function handleSubmit() {
       loading.value = false;
       const dictTypeId = formData.id;
       if (dictTypeId) {
-        updateDictType(dictTypeId, formData)
+        setDictTypesUpdate(formData)
           .then(() => {
             ElMessage.success("修改成功");
             closeDialog();
@@ -250,7 +253,7 @@ function handleSubmit() {
           })
           .finally(() => (loading.value = false));
       } else {
-        addDictType(formData)
+        setDictTypesAdd(formData)
           .then(() => {
             ElMessage.success("新增成功");
             closeDialog();
@@ -273,7 +276,7 @@ function resetForm() {
   dataFormRef.value.resetFields();
   dataFormRef.value.clearValidate();
 
-  formData.id = undefined;
+  formData.id = 0;
   formData.status = 1;
 }
 
@@ -290,7 +293,7 @@ function handleDelete(dictTypeId?: number) {
     cancelButtonText: "取消",
     type: "warning",
   }).then(() => {
-    deleteDictTypes(dictTypeIds).then(() => {
+    setDictTypesDelete({ ids: dictTypeIds }).then(() => {
       ElMessage.success("删除成功");
       resetQuery();
     });
@@ -305,7 +308,7 @@ const dictDataDialog = reactive({
 const selectedDictType = reactive({ typeCode: "", typeName: "" }); // 当前选中的字典类型
 
 /** 打开字典数据弹窗 */
-function openDictDialog(row: DictTypePageVO) {
+function openDictDialog(row: AdminCore.V1DictTypesItem) {
   dictDataDialog.visible = true;
   dictDataDialog.title = "【" + row.name + "】字典数据";
 

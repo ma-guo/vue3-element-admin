@@ -65,6 +65,7 @@ export const getUsersPage = (
 
 /**
  * 新增用户
+ * @param id number 用户ID
  * @param username string 用户名
  * @param nickname string 用户昵称
  * @param password string 密码
@@ -298,6 +299,8 @@ export const setMenusDelete = (
  * @param sort number 排序(数字越小排名越靠前)
  * @param icon string 菜单图标
  * @param redirect string 跳转路径
+ * @param keepAlive number 是否开启缓存
+ * @param alwaysShow number 是否总是显示
  * @returns AdminCore.NoneRsp
  */
 export const setMenusAdd = (
@@ -386,6 +389,7 @@ export const getDeptList = (
 
 /**
  * 添加部门
+ * @param id number 部门id, 前端使用
  * @param parentId number 父部门id
  * @param name string 部门名称
  * @param sort number 排序

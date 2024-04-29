@@ -5,8 +5,10 @@ declare namespace AdminCore {
 
   /** 本请求不需要参数 */
   interface NoneReq {}
+
   /** 返回数据为空 */
   interface NoneRsp {}
+
   /**
    * 选项数值
    *
@@ -18,6 +20,7 @@ declare namespace AdminCore {
     /** 选项名称 */
     label: string;
   }
+
   /** 成员包括 value, label, children */
   interface LongOptions {
     /** 选项ID */
@@ -27,6 +30,7 @@ declare namespace AdminCore {
     /** 子选项 */
     children: LongOptions[];
   }
+
   /** 成员包括 value, label, children */
   interface StringOptions {
     /** 选项ID */
@@ -36,6 +40,7 @@ declare namespace AdminCore {
     /** 子选项 */
     children: StringOptions[];
   }
+
   /**
    * 登录请求参数
    *
@@ -51,6 +56,7 @@ declare namespace AdminCore {
     /** 验证码 */
     captchaCode: string;
   }
+
   /**
    * 登录返回参数
    *
@@ -66,6 +72,7 @@ declare namespace AdminCore {
     /** token 过期时间, 单位毫秒 */
     expiresIn: number;
   }
+
   /**
    * 验证码返回参数
    *
@@ -81,6 +88,7 @@ declare namespace AdminCore {
     /** 图片高度 */
     height: number;
   }
+
   /**
    * 获取当前登录用户信息返回参数
    *
@@ -100,6 +108,7 @@ declare namespace AdminCore {
     /** 用户权限标识集合 */
     perms: string[];
   }
+
   /**
    * 用户分页列表项数据结构
    *
@@ -129,23 +138,25 @@ declare namespace AdminCore {
     /** 创建时间 */
     createTime: string;
   }
+
   /** 成员包括 keywords, status, deptId, pageNum, pageSize, startTime, endTime */
   interface V1UsersPageReq {
     /** 关键字 */
-    keywords?: string;
+    keywords: string;
     /** 用户状态 */
-    status?: number;
+    status: number;
     /** 部门ID */
-    deptId?: number;
+    deptId: number;
     /** 页码 */
-    pageNum?: number;
+    pageNum: number;
     /** 每页条数 */
-    pageSize?: number;
+    pageSize: number;
     /** 开始时间-年月日 */
-    startTime?: string;
+    startTime: string;
     /** 结束时间-年月日 */
-    endTime?: string;
+    endTime: string;
   }
+
   /**
    * 用户分页列表返回参数
    *
@@ -157,33 +168,37 @@ declare namespace AdminCore {
     /** 用户列表 */
     list: V1UserPageItem[];
   }
+
   /**
    * 新增用户请求参数
    *
-   * 成员包括 username, nickname, password, mobile, gender, avatar, email, status, deptId, roleIds
+   * 成员包括 id, username, nickname, password, mobile, gender, avatar, email, status, deptId, roleIds
    */
   interface V1UsersAddReq {
+    /** 用户ID */
+    id: number;
     /** 用户名 */
     username: string;
     /** 用户昵称 */
     nickname: string;
     /** 密码 */
-    password?: string;
+    password: string;
     /** 手机号 */
-    mobile?: string;
+    mobile: string;
     /** 性别 取值范围及含义: 0 - 未知; 1 - 男; 2 - 女; */
-    gender?: number;
+    gender: number;
     /** 头像地址 */
-    avatar?: string;
+    avatar: string;
     /** 用户邮箱 */
-    email?: string;
+    email: string;
     /** 用户状态 取值范围及含义: 1 - 启用; 0 - 停用; */
-    status?: number;
+    status: number;
     /** 部门ID */
-    deptId?: number;
+    deptId: number;
     /** 角色ID集合 */
     roleIds: number[];
   }
+
   /**
    * 用户表单请求参数
    *
@@ -193,6 +208,7 @@ declare namespace AdminCore {
     /** 用户ID */
     userId: number;
   }
+
   /**
    * 用户表单返回参数
    *
@@ -208,7 +224,7 @@ declare namespace AdminCore {
     /** 手机号 */
     mobile: string;
     /** 性别 取值范围及含义: 0 - 未知; 1 - 男; 2 - 女; */
-    gender?: number;
+    gender: number;
     /** 头像地址 */
     avatar: string;
     /** 用户邮箱 */
@@ -220,6 +236,7 @@ declare namespace AdminCore {
     /** 角色ID集合 */
     roleIds: number[];
   }
+
   /**
    * 修改用户信息参数
    *
@@ -237,9 +254,9 @@ declare namespace AdminCore {
     /** 用户状态 取值范围及含义: 0 - 未知; 1 - 男; 2 - 女; */
     gender: number;
     /** 头像地址 */
-    avatar?: string;
+    avatar: string;
     /** 用户邮箱 */
-    email?: string;
+    email: string;
     /** 用户状态 取值范围及含义: 1 - 启用; 0 - 停用; */
     status: number;
     /** 部门ID */
@@ -247,6 +264,7 @@ declare namespace AdminCore {
     /** 角色ID集合 */
     roleIds: number[];
   }
+
   /**
    * 删除用户请求参数
    *
@@ -256,6 +274,7 @@ declare namespace AdminCore {
     /** 用户ID，多个以英文逗号(,)分割 */
     ids: string;
   }
+
   /**
    * 修改密码请求参数
    *
@@ -267,6 +286,7 @@ declare namespace AdminCore {
     /** 新密码 */
     password: string;
   }
+
   /**
    * 修改用户状态请求参数
    *
@@ -278,6 +298,7 @@ declare namespace AdminCore {
     /** 用户状态 取值范围及含义: 1 - 启用; 0 - 停用; */
     status: number;
   }
+
   /**
    * 角色分页列表
    *
@@ -285,12 +306,13 @@ declare namespace AdminCore {
    */
   interface V1RolesPageReq {
     /** 搜索关键字 */
-    keywords?: string;
+    keywords: string;
     /** 页码 */
-    pageNum?: number;
+    pageNum: number;
     /** 每页数量 */
-    pageSize?: number;
+    pageSize: number;
   }
+
   /**
    * 角色列表项
    *
@@ -312,6 +334,7 @@ declare namespace AdminCore {
     /** 更新时间 */
     updateTime: string;
   }
+
   /** 成员包括 list, total */
   interface V1RolesPageRsp {
     /** 数据项 */
@@ -319,11 +342,13 @@ declare namespace AdminCore {
     /** 总数 */
     total: number;
   }
+
   /** 成员包括 items */
   interface V1RolesOptiosRsp {
     /** 角色下拉列表项 */
     items: LongOptionItem[];
   }
+
   /**
    * 角色新增
    *
@@ -331,7 +356,7 @@ declare namespace AdminCore {
    */
   interface V1RolesAddReq {
     /** 角色ID */
-    id?: number;
+    id: number;
     /** 角色名称 */
     name: string;
     /** 角色编码 */
@@ -339,10 +364,11 @@ declare namespace AdminCore {
     /** 角色状态 取值范围及含义: 1 - 启用; 0 - 停用; */
     status: number;
     /** 排序 */
-    sort?: number;
+    sort: number;
     /** 数据权限 取值范围及含义: 0 - 所有数据; 1 - 部门及子部门数据; 2 - 本部门数据; 3 - 本人数据; */
-    dataScope?: number;
+    dataScope: number;
   }
+
   /**
    * 角色表单数据请求结构
    *
@@ -352,6 +378,7 @@ declare namespace AdminCore {
     /** 角色ID */
     id: number;
   }
+
   /**
    * 角色表单数据
    *
@@ -359,7 +386,7 @@ declare namespace AdminCore {
    */
   interface V1RolesFormRsp {
     /** 角色ID */
-    id?: number;
+    id: number;
     /** 角色名称 */
     name: string;
     /** 角色编码 */
@@ -367,10 +394,11 @@ declare namespace AdminCore {
     /** 角色状态 取值范围及含义: 1 - 启用; 0 - 停用; */
     status: number;
     /** 排序 */
-    sort?: number;
+    sort: number;
     /** 数据权限 取值范围及含义: 0 - 所有数据; 1 - 部门及子部门数据; 2 - 本部门数据; 3 - 本人数据; */
-    dataScope?: number;
+    dataScope: number;
   }
+
   /**
    * 角色表单数据
    *
@@ -386,10 +414,11 @@ declare namespace AdminCore {
     /** 角色状态 取值范围及含义: 1 - 启用; 0 - 停用; */
     status: number;
     /** 排序 */
-    sort?: number;
+    sort: number;
     /** 数据权限 取值范围及含义: 0 - 所有数据; 1 - 部门及子部门数据; 2 - 本部门数据; 3 - 本人数据; */
-    dataScope?: number;
+    dataScope: number;
   }
+
   /**
    * 角色删除
    *
@@ -399,6 +428,7 @@ declare namespace AdminCore {
     /** 删除角色，多个以英文逗号(,)分割 */
     ids: string;
   }
+
   /**
    * 获取角色的菜单ID集合
    *
@@ -408,6 +438,7 @@ declare namespace AdminCore {
     /** 角色ID */
     roleId: number;
   }
+
   /**
    * 获取角色的菜单ID集合
    *
@@ -417,6 +448,7 @@ declare namespace AdminCore {
     /** 菜单ID集合 */
     items: number[];
   }
+
   /**
    * 给角色分配权限
    *
@@ -428,6 +460,7 @@ declare namespace AdminCore {
     /** 菜单ID集合 */
     menuIds: number[];
   }
+
   /**
    * 修改角色状态
    *
@@ -439,6 +472,7 @@ declare namespace AdminCore {
     /** 角色状态 取值范围及含义: 1 - 启用; 0 - 停用; */
     status: number;
   }
+
   /**
    * 菜单视图对象
    *
@@ -448,30 +482,31 @@ declare namespace AdminCore {
     /** 菜单ID */
     id: number;
     /** 父菜单ID */
-    parentId?: number;
+    parentId: number;
     /** 菜单名称 */
     name: string;
     /** ICON */
-    icon?: string;
+    icon: string;
     /** 路由相对路径 */
-    path?: string;
+    path: string;
     /** 路由名称 */
-    routeName?: string;
+    routeName: string;
     /** 组件路径 */
-    component?: string;
+    component: string;
     /** 菜单排序(数字越小排名越靠前) */
-    sort?: number;
+    sort: number;
     /** 是否可见 取值范围及含义: 1 - 显示; 0 - 隐藏; */
-    visible?: number;
+    visible: number;
     /** 跳转路径 */
-    redirect?: string;
+    redirect: string;
     /** 菜单类型 取值范围及含义: NULL - 无类型; CATALOG - 目录; MENU - 菜单; BUTTON - 按钮; EXTLINK - 外链; */
-    type?: string;
+    type: string;
     /** 按钮权限标识 */
-    perm?: string;
+    perm: string;
     /** 子菜单 */
     children: MenuItem[];
   }
+
   /**
    * 菜单列表请求
    *
@@ -479,12 +514,13 @@ declare namespace AdminCore {
    */
   interface V1MenusListReq {
     /** 关键字 */
-    keywords?: string;
+    keywords: string;
     /** 状态 取值范围及含义: 1 - 显示; 0 - 隐藏; */
-    status?: number;
+    status: number;
     /** 菜单类型, 忽略本参数 取值范围及含义: 1 - MENU; 2 - CATALOG; 3 - EXTLINK; 4 - BUTTON; */
-    type?: number;
+    type: number;
   }
+
   /**
    * 菜单列表响应
    *
@@ -494,6 +530,7 @@ declare namespace AdminCore {
     /** 菜单列表 */
     items: MenuItem[];
   }
+
   /**
    * 菜单删除请求
    *
@@ -503,35 +540,41 @@ declare namespace AdminCore {
     /** 菜单ID */
     ids: string;
   }
+
   /**
    * 菜单表单对象
    *
-   * 成员包括 id, parentId, name, type, path, component, perm, visible, sort, icon, redirect
+   * 成员包括 id, parentId, name, type, path, component, perm, visible, sort, icon, redirect, keepAlive, alwaysShow
    */
   interface V1MenusAddReq {
     /** 菜单ID */
-    id?: number;
+    id: number;
     /** 父菜单ID */
-    parentId?: number;
+    parentId: number;
     /** 菜单名称 */
     name: string;
     /** 菜单类型 取值范围及含义: NULL - 无类型; CATALOG - 目录; MENU - 菜单; BUTTON - 按钮; EXTLINK - 外链; */
-    type?: string;
+    type: string;
     /** 路由路径 */
-    path?: string;
+    path: string;
     /** 组件路径(vue页面完整路径，省略.vue后缀) */
-    component?: string;
+    component: string;
     /** 权限标识 */
-    perm?: string;
+    perm: string;
     /** 显示状态 取值范围及含义: 1 - 显示; 0 - 隐藏; */
-    visible?: number;
+    visible: number;
     /** 排序(数字越小排名越靠前) */
-    sort?: number;
+    sort: number;
     /** 菜单图标 */
-    icon?: string;
+    icon: string;
     /** 跳转路径 */
-    redirect?: string;
+    redirect: string;
+    /** 是否开启缓存 */
+    keepAlive: number;
+    /** 是否总是显示 */
+    alwaysShow: number;
   }
+
   /** 成员包括 value, label, children */
   interface MenuOptions {
     /** 菜单ID */
@@ -541,6 +584,7 @@ declare namespace AdminCore {
     /** 子菜单 */
     children: MenuOptions[];
   }
+
   /**
    * 菜单选项列表响应
    *
@@ -550,19 +594,21 @@ declare namespace AdminCore {
     /** 菜单选项列表 */
     items: MenuOptions[];
   }
+
   /** 成员包括 title, icon, hiddle, roles, keepAlive */
   interface MenuRouteMeta {
     /** 路由title */
     title: string;
     /** 路由icon */
-    icon?: string;
+    icon: string;
     /** 是否隐藏 */
-    hiddle?: boolean;
+    hiddle: boolean;
     /** 拥有路由权限的角色编码 */
     roles: string[];
     /** 是否开启缓存 */
-    keepAlive?: boolean;
+    keepAlive: boolean;
   }
+
   /**
    * 路由属性类型
    *
@@ -576,17 +622,19 @@ declare namespace AdminCore {
     /** 路由名称 */
     name: string;
     /** 跳转链接 */
-    redirect?: string;
+    redirect: string;
     /** 路由元信息 */
     meta: MenuRouteMeta;
     /** 子路由 */
     children: MenuRouteItem[];
   }
+
   /** 成员包括 items */
   interface MenuRouteRsp {
     /** 路由列表 */
     items: MenuRouteItem[];
   }
+
   /**
    * 菜单表单请求
    *
@@ -596,6 +644,7 @@ declare namespace AdminCore {
     /** 菜单ID */
     id: number;
   }
+
   /**
    * 菜单表单数据
    *
@@ -603,32 +652,33 @@ declare namespace AdminCore {
    */
   interface V1MenusFormRsp {
     /** 菜单ID */
-    id?: number;
+    id: number;
     /** 父菜单ID */
-    parentId?: number;
+    parentId: number;
     /** 菜单名称 */
     name: string;
     /** 菜单类型 取值范围及含义: NULL - 无类型; CATALOG - 目录; MENU - 菜单; BUTTON - 按钮; EXTLINK - 外链; */
-    type?: string;
+    type: string;
     /** 路由路径 */
-    path?: string;
+    path: string;
     /** 组件路径(vue页面完整路径，省略.vue后缀) */
-    component?: string;
+    component: string;
     /** 权限标识 */
-    perm?: string;
+    perm: string;
     /** 显示状态 取值范围及含义: 1 - 显示; 0 - 隐藏; */
-    visible?: number;
+    visible: number;
     /** 排序(数字越小排名越靠前) */
-    sort?: number;
+    sort: number;
     /** 菜单图标 */
-    icon?: string;
+    icon: string;
     /** 跳转路径 */
-    redirect?: string;
+    redirect: string;
     /** 是否总是显示 */
-    alwaysShow?: number;
+    alwaysShow: number;
     /** 是否开启缓存 */
-    keepAlive?: number;
+    keepAlive: number;
   }
+
   /**
    * 修改菜单请求参数
    *
@@ -638,30 +688,31 @@ declare namespace AdminCore {
     /** 菜单ID */
     id: number;
     /** 父菜单ID */
-    parentId?: number;
+    parentId: number;
     /** 菜单名称 */
     name: string;
     /** 菜单类型 取值范围及含义: NULL - 无类型; CATALOG - 目录; MENU - 菜单; BUTTON - 按钮; EXTLINK - 外链; */
-    type?: string;
+    type: string;
     /** 路由路径 */
-    path?: string;
+    path: string;
     /** 组件路径(vue页面完整路径，省略.vue后缀) */
-    component?: string;
+    component: string;
     /** 权限标识 */
-    perm?: string;
+    perm: string;
     /** 显示状态 取值范围及含义: 1 - 显示; 0 - 隐藏; */
-    visible?: number;
+    visible: number;
     /** 排序(数字越小排名越靠前) */
-    sort?: number;
+    sort: number;
     /** 菜单图标 */
-    icon?: string;
+    icon: string;
     /** 跳转路径 */
-    redirect?: string;
+    redirect: string;
     /** 是否总是显示 */
-    alwaysShow?: number;
+    alwaysShow: number;
     /** 是否开启缓存 */
-    keepAlive?: number;
+    keepAlive: number;
   }
+
   /**
    * 修改菜单状态请求参数
    *
@@ -673,6 +724,7 @@ declare namespace AdminCore {
     /** 菜单状态 取值范围及含义: 1 - 显示; 0 - 隐藏; */
     visible: number;
   }
+
   /**
    * 部门信息
    *
@@ -682,20 +734,21 @@ declare namespace AdminCore {
     /** 部门id */
     id: number;
     /** 父部门id */
-    parentId?: number;
+    parentId: number;
     /** 部门名称 */
     name: string;
     /** 排序 */
-    sort?: number;
+    sort: number;
     /** 状态 取值范围及含义: 1 - 启用; 0 - 停用; */
-    status?: number;
+    status: number;
     /** 创建时间 */
-    createTime?: string;
+    createTime: string;
     /** 修改时间 */
-    updateTime?: string;
+    updateTime: string;
     /** 子部门 */
     children: V1DeptItem[];
   }
+
   /**
    * 部门列表请求
    *
@@ -703,10 +756,11 @@ declare namespace AdminCore {
    */
   interface V1DeptListReq {
     /** 搜索关键词 */
-    keyword?: string;
+    keyword: string;
     /** 状态 取值范围及含义: 1 - 启用; 0 - 停用; */
-    status?: number;
+    status: number;
   }
+
   /**
    * 部门列表响应
    *
@@ -716,21 +770,25 @@ declare namespace AdminCore {
     /** 部门列表 */
     items: V1DeptItem[];
   }
+
   /**
    * 部门添加请求参数
    *
-   * 成员包括 parentId, name, sort, status
+   * 成员包括 id, parentId, name, sort, status
    */
   interface V1DeptAddReq {
+    /** 部门id, 前端使用 */
+    id: number;
     /** 父部门id */
     parentId: number;
     /** 部门名称 */
     name: string;
     /** 排序 */
-    sort?: number;
+    sort: number;
     /** 状态 取值范围及含义: 1 - 启用; 0 - 停用; */
-    status?: number;
+    status: number;
   }
+
   /**
    * 部门下拉列表响应
    *
@@ -740,6 +798,7 @@ declare namespace AdminCore {
     /** 部门列表 */
     items: LongOptions[];
   }
+
   /**
    * 修改部门请求参数
    *
@@ -753,10 +812,11 @@ declare namespace AdminCore {
     /** 部门名称 */
     name: string;
     /** 排序 */
-    sort?: number;
+    sort: number;
     /** 状态 取值范围及含义: 1 - 启用; 0 - 停用; */
-    status?: number;
+    status: number;
   }
+
   /**
    * 获取部门表单数据请求参数
    *
@@ -766,6 +826,7 @@ declare namespace AdminCore {
     /** 部门id */
     id: number;
   }
+
   /**
    * 获取部门表单数据返回参数
    *
@@ -779,10 +840,11 @@ declare namespace AdminCore {
     /** 部门名称 */
     name: string;
     /** 排序 */
-    sort?: number;
+    sort: number;
     /** 状态 取值范围及含义: 1 - 启用; 0 - 停用; */
-    status?: number;
+    status: number;
   }
+
   /**
    * 删除部门请求参数
    *
@@ -792,28 +854,31 @@ declare namespace AdminCore {
     /** 部门ID，多个以英文逗号(,)分割 */
     ids: string;
   }
+
   /** 成员包括 keywords, typeCode, pageNum, pageSize */
   interface V1DictPageReq {
     /** 关键字(类型名称/类型编码) */
-    keywords?: string;
+    keywords: string;
     /** 字典类型编码 */
-    typeCode?: string;
+    typeCode: string;
     /** 页码 */
-    pageNum?: number;
+    pageNum: number;
     /** 每页记录数 */
-    pageSize?: number;
+    pageSize: number;
   }
+
   /** 成员包括 id, name, value, status */
   interface V1DictItem {
     /** 主键 */
-    id?: number;
+    id: number;
     /** 字典名称 */
-    name?: string;
+    name: string;
     /** 字典值 */
-    value?: string;
+    value: string;
     /** 状态 取值范围及含义: 1 - 启用; 0 - 停用; */
-    status?: number;
+    status: number;
   }
+
   /** 成员包括 list, total */
   interface V1DictPageRsp {
     /** 列表 */
@@ -821,97 +886,107 @@ declare namespace AdminCore {
     /** 总记录数 */
     total: number;
   }
+
   /** 成员包括 typeCode */
   interface V1DictOptionsReq {
     /** 字典类型编码 */
     typeCode: string;
   }
+
   /** 成员包括 items */
   interface V1DictOptionsRsp {
     /** 选项列表 */
     items: StringOptions[];
   }
+
   /** 成员包括 id */
   interface V1DictFormReq {
     /** 字典ID */
     id: number;
   }
+
   /** 成员包括 id, typeCode, name, value, status, sort, remark */
   interface V1DictFormRsp {
     /** 主键 */
-    id?: number;
+    id: number;
     /** 类型编码 */
     typeCode: string;
     /** 字典名称 */
-    name?: string;
+    name: string;
     /** 字典值 */
-    value?: string;
+    value: string;
     /** 状态 取值范围及含义: 1 - 启用; 0 - 停用; */
-    status?: number;
+    status: number;
     /** 排序 */
-    sort?: number;
+    sort: number;
     /** 备注 */
-    remark?: string;
+    remark: string;
   }
+
   /** 成员包括 id, typeCode, name, value, status, sort, remark */
   interface V1DictAddReq {
     /** 主键 */
-    id?: number;
+    id: number;
     /** 类型编码 */
     typeCode: string;
     /** 字典名称 */
-    name?: string;
+    name: string;
     /** 字典值 */
-    value?: string;
+    value: string;
     /** 状态 取值范围及含义: 1 - 启用; 0 - 停用; */
-    status?: number;
+    status: number;
     /** 排序 */
-    sort?: number;
+    sort: number;
     /** 备注 */
-    remark?: string;
+    remark: string;
   }
+
   /** 成员包括 id, typeCode, name, value, status, sort, remark */
   interface V1DictUpdateReq {
     /** 主键 */
     id: number;
     /** 类型编码 */
-    typeCode?: string;
+    typeCode: string;
     /** 字典名称 */
-    name?: string;
+    name: string;
     /** 字典值 */
-    value?: string;
+    value: string;
     /** 状态 取值范围及含义: 1 - 启用; 0 - 停用; */
-    status?: number;
+    status: number;
     /** 排序 */
-    sort?: number;
+    sort: number;
     /** 备注 */
-    remark?: string;
+    remark: string;
   }
+
   /** 成员包括 ids */
   interface V1DictDeleteReq {
     /** 字典ID，多个以英文逗号(,)拼接 */
     ids: string;
   }
+
   /** 成员包括 keywords, pageNum, pageSize */
   interface V1DictTypesPageReq {
     /** 关键字(类型名称/类型编码) */
-    keywords?: string;
+    keywords: string;
     /** 页码 */
-    pageNum?: number;
+    pageNum: number;
     /** 每页记录数 */
-    pageSize?: number;
+    pageSize: number;
   }
+
   /** 成员包括 id, name, code, status */
   interface V1DictTypesItem {
     /** 主键 */
-    id?: number;
+    id: number;
     /** 类型名称 */
-    name?: string;
+    name: string;
     /** 类型编码 */
-    code?: string;
+    code: string;
     /** 状态 取值范围及含义: 1 - 启用; 0 - 停用; */
-    status?: number;
+    status: number;
   }
+
   /** 成员包括 list, total */
   interface V1DictTypesPageRsp {
     /** 列表 */
@@ -919,50 +994,55 @@ declare namespace AdminCore {
     /** 总记录数 */
     total: number;
   }
+
   /** 成员包括 id */
   interface V1DictTypesFormReq {
     /** 主键 */
     id: number;
   }
+
   /** 成员包括 id, name, code, status, remark */
   interface V1DictTypesFormRsp {
     /** 主键 */
-    id?: number;
+    id: number;
     /** 类型名称 */
-    name?: string;
+    name: string;
     /** 类型编码 */
-    code?: string;
+    code: string;
     /** 状态 取值范围及含义: 1 - 启用; 0 - 停用; */
-    status?: number;
+    status: number;
     /** 备注 */
-    remark?: string;
+    remark: string;
   }
+
   /** 成员包括 id, name, code, status, remark */
   interface V1DictTypesAddReq {
     /** 主键 */
-    id?: number;
+    id: number;
     /** 类型名称 */
-    name?: string;
+    name: string;
     /** 类型编码-必填 */
     code: string;
     /** 状态 取值范围及含义: 1 - 启用; 0 - 停用; */
-    status?: number;
+    status: number;
     /** 备注 */
-    remark?: string;
+    remark: string;
   }
+
   /** 成员包括 id, name, code, status, remark */
   interface V1DictTypesUpdateReq {
     /** 主键 */
     id: number;
     /** 类型名称 */
-    name?: string;
+    name: string;
     /** 类型编码 */
     code: string;
     /** 状态 取值范围及含义: 1 - 启用; 0 - 停用; */
-    status?: number;
+    status: number;
     /** 备注 */
-    remark?: string;
+    remark: string;
   }
+
   /** 成员包括 ids */
   interface V1DictTypesDeleteReq {
     /** 字典类型ID，多个以英文逗号(,)分割 */

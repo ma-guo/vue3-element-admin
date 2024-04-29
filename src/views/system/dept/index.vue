@@ -4,7 +4,7 @@
       <el-form ref="queryFormRef" :model="queryParams" :inline="true">
         <el-form-item label="关键字" prop="keywords">
           <el-input
-            v-model="queryParams.keywords"
+            v-model="queryParams.keyword"
             placeholder="部门名称"
             @keyup.enter="handleQuery"
           />
@@ -151,16 +151,14 @@
 </template>
 
 <script setup lang="ts">
+import { setDeptUpdate } from "@/api/admin/api";
+import { setDeptDelete } from "@/api/admin/api";
 import {
-  getDeptForm,
-  deleteDept,
-  updateDept,
-  addDept,
+  getDeptList,
   getDeptOptions,
-  listDepts,
-} from "@/api/dept";
-
-import { DeptVO, DeptForm, DeptQuery } from "@/api/dept/types";
+  getDeptForm,
+  setDeptAdd,
+} from "@/api/admin/api";
 
 defineOptions({
   name: "Dept",
@@ -177,15 +175,20 @@ const dialog = reactive({
   visible: false,
 });
 
-const queryParams = reactive<DeptQuery>({});
-const deptList = ref<DeptVO[]>();
+const queryParams = reactive<AdminCore.V1DeptListReq>({
+  keyword: "",
+  status: 1,
+});
+const deptList = ref<AdminCore.V1DeptItem[]>();
 
-const deptOptions = ref<OptionType[]>();
+const deptOptions = ref<AdminCore.LongOptions[]>();
 
-const formData = reactive<DeptForm>({
+const formData = reactive<AdminCore.V1DeptAddReq>({
+  id: 0,
   status: 1,
   parentId: 0,
   sort: 1,
+  name: "",
 });
 
 const rules = reactive({
@@ -197,7 +200,7 @@ const rules = reactive({
 /** 查询 */
 function handleQuery() {
   loading.value = true;
-  listDepts(queryParams).then(({ data }) => {
+  getDeptList(queryParams).then(({ data }) => {
     deptList.value = data.items;
     loading.value = false;
   });
@@ -216,7 +219,7 @@ function handleSelectionChange(selection: any) {
 
 /** 获取部门下拉数据  */
 async function loadDeptOptions() {
-  getDeptOptions().then((response) => {
+  getDeptOptions({}).then((response) => {
     deptOptions.value = [
       {
         value: 0,
@@ -238,7 +241,7 @@ async function openDialog(parentId?: number, deptId?: number) {
   dialog.visible = true;
   if (deptId) {
     dialog.title = "修改部门";
-    getDeptForm(deptId).then(({ data }) => {
+    getDeptForm({ id: deptId }).then(({ data }) => {
       Object.assign(formData, data);
     });
   } else {
@@ -254,7 +257,7 @@ function handleSubmit() {
       const deptId = formData.id;
       loading.value = true;
       if (deptId) {
-        updateDept(deptId, formData)
+        setDeptUpdate(formData)
           .then(() => {
             ElMessage.success("修改成功");
             closeDialog();
@@ -262,7 +265,7 @@ function handleSubmit() {
           })
           .finally(() => (loading.value = false));
       } else {
-        addDept(formData)
+        setDeptAdd(formData)
           .then(() => {
             ElMessage.success("新增成功");
             closeDialog();
@@ -288,7 +291,7 @@ function handleDelete(deptId?: number) {
     cancelButtonText: "取消",
     type: "warning",
   }).then(() => {
-    deleteDept(deptIds).then(() => {
+    setDeptDelete({ ids: deptIds }).then(() => {
       ElMessage.success("删除成功");
       resetQuery();
     });
@@ -306,7 +309,7 @@ function resetForm() {
   deptFormRef.value.resetFields();
   deptFormRef.value.clearValidate();
 
-  formData.id = undefined;
+  formData.id = 0;
   formData.parentId = 0;
   formData.status = 1;
   formData.sort = 1;

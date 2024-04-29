@@ -6,7 +6,7 @@
       <el-form ref="queryFormRef" :model="queryParams" :inline="true">
         <el-form-item label="关键字" prop="name">
           <el-input
-            v-model="queryParams.name"
+            v-model="queryParams.keywords"
             placeholder="字典名称"
             clearable
           />
@@ -130,13 +130,12 @@
 
 <script setup lang="ts">
 import {
+  getDictForm,
   getDictPage,
-  getDictFormData,
-  addDict,
-  updateDict,
-  deleteDict,
-} from "@/api/dict";
-import { DictPageVO, DictForm, DictQuery } from "@/api/dict/types";
+  setDictAdd,
+  setDictDelete,
+  setDictUpdate,
+} from "@/api/admin/api";
 
 defineOptions({
   name: "DictData",
@@ -174,23 +173,28 @@ const loading = ref(false);
 const ids = ref<number[]>([]);
 const total = ref(0);
 
-const queryParams = reactive<DictQuery>({
+const queryParams = reactive<AdminCore.V1DictPageReq>({
   pageNum: 1,
   pageSize: 10,
   typeCode: props.typeCode,
+  keywords: "",
 });
 
-const dictList = ref<DictPageVO[]>();
+const dictList = ref<AdminCore.V1DictItem[]>();
 
 const dialog = reactive({
   title: "",
   visible: false,
 });
 
-const formData = reactive<DictForm>({
+const formData = reactive<AdminCore.V1DictAddReq>({
+  id: 0,
+  name: "",
+  value: "",
   status: 1,
   typeCode: props.typeCode,
   sort: 1,
+  remark: "",
 });
 
 const rules = reactive({
@@ -240,7 +244,7 @@ function openDialog(dictId?: number) {
   dialog.visible = true;
   if (dictId) {
     dialog.title = "修改字典";
-    getDictFormData(dictId).then(({ data }) => {
+    getDictForm({ id: dictId }).then(({ data }) => {
       Object.assign(formData, data);
     });
   } else {
@@ -257,7 +261,7 @@ function handleSubmit() {
       loading.value = false;
       const dictId = formData.id;
       if (dictId) {
-        updateDict(dictId, formData)
+        setDictUpdate(formData)
           .then(() => {
             ElMessage.success("修改成功");
             closeDialog();
@@ -265,7 +269,7 @@ function handleSubmit() {
           })
           .finally(() => (loading.value = false));
       } else {
-        addDict(formData)
+        setDictAdd(formData)
           .then(() => {
             ElMessage.success("新增成功");
             closeDialog();
@@ -292,7 +296,7 @@ function resetForm() {
   dataFormRef.value.resetFields();
   dataFormRef.value.clearValidate();
 
-  formData.id = undefined;
+  formData.id = 0;
   formData.status = 1;
   formData.sort = 1;
   formData.typeCode = props.typeCode;
@@ -313,7 +317,7 @@ function handleDelete(dictId?: number) {
     cancelButtonText: "取消",
     type: "warning",
   }).then(() => {
-    deleteDict(dictIds).then(() => {
+    setDictDelete({ ids: dictIds }).then(() => {
       ElMessage.success("删除成功");
       resetQuery();
     });
