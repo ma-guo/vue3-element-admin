@@ -33,6 +33,11 @@ export const useSettingsStore = defineStore("setting", () => {
     "watermarkEnabled",
     defaultSettings.watermarkEnabled
   );
+  // 水印内容
+  const watermarkContent = useStorage<string>(
+    "watermarkContent",
+    defaultSettings.watermarkContent
+  );
 
   watch(
     [theme, themeColor],
@@ -69,6 +74,7 @@ export const useSettingsStore = defineStore("setting", () => {
     sidebarLogo,
     layout,
     watermarkEnabled,
+    watermarkContent,
   };
 
   function changeSetting({
@@ -117,6 +123,7 @@ export const useSettingsStore = defineStore("setting", () => {
     themeColor,
     theme,
     watermarkEnabled,
+    watermarkContent,
     changeSetting,
     changeTheme,
     changeThemeColor,

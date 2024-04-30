@@ -1,7 +1,6 @@
 import { resetRouter } from "@/router";
 import { store } from "@/store";
 
-import { UserInfo } from "@/api/user/types";
 import { getUsersMe, setAuthLogin, setAuthLogout } from "@/api/admin/api";
 
 export const useUserStore = defineStore("user", () => {

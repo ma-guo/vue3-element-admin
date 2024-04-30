@@ -4,7 +4,7 @@
     <el-watermark
       v-if="watermarkEnabled"
       :font="{ color: fontColor }"
-      :content="defaultSettings.watermarkContent"
+      :content="watermarkContent"
       class="wh-full"
     >
       <router-view />
@@ -26,6 +26,7 @@ const settingsStore = useSettingsStore();
 const locale = computed(() => appStore.locale);
 const size = computed(() => appStore.size as SizeEnum);
 const watermarkEnabled = computed(() => settingsStore.watermarkEnabled);
+const watermarkContent = computed(() => settingsStore.watermarkContent);
 
 // 明亮/暗黑主题水印字体颜色适配
 const fontColor = computed(() => {

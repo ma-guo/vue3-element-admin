@@ -1,7 +1,9 @@
 import router from "@/router";
-import { useUserStore, usePermissionStore } from "@/store";
+import defaultSettings from "@/settings";
+import { useUserStore, usePermissionStore, useSettingsStore } from "@/store";
 import NProgress from "@/utils/nprogress";
 import { RouteRecordRaw } from "vue-router";
+const settingsStore = useSettingsStore();
 
 export function setupPermission() {
   // 白名单路由
@@ -29,7 +31,9 @@ export function setupPermission() {
         } else {
           const permissionStore = usePermissionStore();
           try {
-            const { roles } = await userStore.getUserInfo();
+            const { roles, nickname } = await userStore.getUserInfo();
+            settingsStore.watermarkContent =
+              nickname || defaultSettings.watermarkContent;
             const accessRoutes = await permissionStore.generateRoutes(roles);
             accessRoutes.forEach((route: RouteRecordRaw) => {
               router.addRoute(route);

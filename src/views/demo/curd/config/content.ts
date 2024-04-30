@@ -1,5 +1,5 @@
 import type { IContentConfig } from "@/components/PageContent/index.vue";
-import { exportUser } from "@/api/user";
+import { getUsersExport } from "@/api/admin/api";
 
 const contentConfig: IContentConfig = {
   pageName: "sys:user",
@@ -63,7 +63,7 @@ const contentConfig: IContentConfig = {
   },
   exportAction: function (queryParams) {
     // 导出Excel文件
-    return exportUser(queryParams as any);
+    return getUsersExport(queryParams as any);
   },
   pk: "id",
   toolbar: [

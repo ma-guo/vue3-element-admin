@@ -28,8 +28,8 @@
                 clearable
                 class="!w-[100px]"
               >
-                <el-option label="启用" value="1" />
-                <el-option label="禁用" value="0" />
+                <el-option label="启用" :value="1" />
+                <el-option label="禁用" :value="0" />
               </el-select>
             </el-form-item>
 
@@ -332,13 +332,14 @@ defineOptions({
   inheritAttrs: false,
 });
 
-import { downloadTemplateApi, exportUser, importUser } from "@/api/user";
 import {
   getDeptOptions,
   getRolesOptions,
   getUsersForm,
   getUsersPage,
   setUsersAdd,
+  getUsersExport,
+  getUsersTemplate,
 } from "@/api/admin/api";
 
 import type { UploadInstance } from "element-plus";
@@ -346,6 +347,7 @@ import { genFileId } from "element-plus";
 import { setUsersUpdate } from "@/api/admin/api";
 import { setUsersDelete } from "@/api/admin/api";
 import { setUsersPassword } from "@/api/admin/api";
+import { importUser } from "@/api/user";
 
 const queryFormRef = ref(ElForm); // 查询表单
 const userFormRef = ref(ElForm); // 用户表单
@@ -604,7 +606,7 @@ function handleDelete(id?: number) {
 
 /** 下载导入模板 */
 function downloadTemplate() {
-  downloadTemplateApi().then((response: any) => {
+  getUsersTemplate({}).then((response: any) => {
     const fileData = response.data;
     const fileName = decodeURI(
       response.headers["content-disposition"].split(";")[1].split("=")[1]
@@ -643,7 +645,7 @@ function handleFileExceed(files: any) {
 
 /** 导出用户 */
 function handleExport() {
-  exportUser(queryParams).then((response: any) => {
+  getUsersExport(queryParams).then((response: any) => {
     const fileData = response.data;
     const fileName = decodeURI(
       response.headers["content-disposition"].split(";")[1].split("=")[1]

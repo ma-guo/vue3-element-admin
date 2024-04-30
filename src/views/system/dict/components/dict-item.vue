@@ -46,13 +46,14 @@
         <el-table-column type="selection" width="50" />
         <el-table-column label="字典名称" prop="name" />
         <el-table-column label="字典值" prop="value" />
-        <el-table-column label="状态" align="center">
+        <el-table-column label="备注" prop="remark" />
+        <el-table-column label="状态" align="center" width="80">
           <template #default="scope">
             <el-tag v-if="scope.row.status === 1" type="success">启用</el-tag>
             <el-tag v-else type="info">禁用</el-tag>
           </template>
         </el-table-column>
-        <el-table-column fixed="right" label="操作" align="center">
+        <el-table-column fixed="right" label="操作" align="center" width="140">
           <template #default="scope">
             <el-button
               v-hasPerm="['sys:dict:edit']"
