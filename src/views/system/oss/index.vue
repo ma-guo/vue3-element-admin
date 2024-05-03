@@ -4,7 +4,7 @@
     <el-row :gutter="20">
       <!-- 部门树 -->
       <el-col :lg="5" :xs="24" class="mb-[12px]">
-        <oss-tree v-model="ossQuery.vendor" @node-click="handleOssQuery" />
+        <oss-tree v-model="ossQuery" @node-click="handleOssQuery" />
       </el-col>
 
       <!-- 用户列表 -->
@@ -13,9 +13,8 @@
           <el-form ref="queryFormRef" :model="queryParams" :inline="true">
             <el-form-item label="当前选用服务商" prop="status">
               <el-select
-                v-model="currentVendorValue"
+                v-model="currentVendor.value"
                 placeholder="全部"
-                clearable
                 class="!w-[140px]"
               >
                 <el-option
@@ -27,9 +26,6 @@
               </el-select>
             </el-form-item>
             <el-form-item>
-              <el-button type="primary" @click="loadOssVendorOptions"
-                ><i-ep-search />刷新</el-button
-              >
               <el-button type="info" @click="venderChangeTipsVisible = true">
                 <el-icon><Select /></el-icon>
                 选用当前服务商</el-button
@@ -41,7 +37,12 @@
         <el-card shadow="never" class="table-container">
           <template #header>
             <div class="flex justify-between">
-              OSS [{{ currentVendorName }}] 配置信息
+              <div class="row">
+                OSS [{{ ossQuery.label }}] 配置信息
+                <el-button type="primary" @click="loadOssVendorOptions"
+                  ><i-ep-search />刷新</el-button
+                >
+              </div>
             </div>
           </template>
 
@@ -100,14 +101,14 @@
         <el-form-item
           label="配置值"
           prop="value"
-          v-if="formOptions?.length == 0"
+          v-if="!formOptions || formOptions.length == 0"
         >
           <el-input v-model="formData.value" placeholder="请输入配置值" />
         </el-form-item>
         <el-form-item
           label="配置值"
           prop="value"
-          v-if="formOptions!!.length > 0"
+          v-if="formOptions && formOptions.length > 0"
         >
           <el-select
             v-model="formData.value"
@@ -158,7 +159,7 @@
 
 <script setup lang="ts">
 defineOptions({
-  name: "User",
+  name: "OssStore",
   inheritAttrs: false,
 });
 
@@ -169,6 +170,10 @@ import {
   getVendorPage,
 } from "@/api/admin/api";
 
+interface OssQueryWrap extends AdminCore.V1VendorPageReq {
+  value: string;
+  label: string;
+}
 const queryFormRef = ref(ElForm); // 查询表单
 const userFormRef = ref(ElForm); // 用户表单
 
@@ -183,19 +188,27 @@ const queryParams = reactive<AdminCore.V1UsersPageReq>({
   endTime: "",
 });
 
-const ossQuery = reactive<AdminCore.V1VendorPageReq>({
+const ossQuery = reactive<OssQueryWrap>({
   vendor: "",
   pageNum: 1,
   pageSize: 10,
+  value: "",
+  label: "",
 });
 
 const ossList = ref<AdminCore.V1VendorItem[]>(); // OSS列表
 const dateTimeRange = ref("");
 const total = ref(0); // 数据总数
 const vendorList = ref<AdminCore.StringOptionItem[]>(); // 角色下拉数据源
-const currentVendor = ref<AdminCore.V1VendorItem>(); // 当前选用服务商
-const currentVendorValue = ref<string>(""); // 当前选用服务商值
-const currentVendorName = ref<string>(""); // 当前选用服务商名称
+const currentVendor = ref<AdminCore.V1VendorItem>({
+  id: 0,
+  vendor: "",
+  name: "",
+  key: "",
+  remark: "",
+  value: "",
+  updateTime: "",
+}); // 当前选用服务商
 const formOptions = ref<AdminCore.StringOptionItem[]>(); // 编辑选项数据源
 const venderChangeTipsVisible = ref(false);
 
@@ -240,13 +253,7 @@ const rules = reactive({
 
 function handleOssQuery() {
   loading.value = true;
-  // 更新当前表中的名字
-  vendorList.value?.find((item) => {
-    if (item.value === ossQuery.vendor) {
-      currentVendorValue.value = item.value;
-      updateVendorName();
-    }
-  });
+  ossQuery.vendor = ossQuery.value;
   getVendorPage(ossQuery)
     .then(({ data }) => {
       ossList.value = data.items;
@@ -263,27 +270,23 @@ function resetQuery() {
   handleOssQuery();
 }
 
-// 更新服务商名字
-function updateVendorName() {
-  vendorList.value?.forEach((item) => {
-    if (item.value === currentVendorValue.value) {
-      currentVendorName.value = item.label;
-    }
-  });
-}
 async function loadOssVendorOptions() {
   getVendorList({}).then((rsp) => {
     const { current, items } = rsp.data;
     currentVendor.value = current;
-    currentVendorValue.value = current.value;
-    currentVendorName.value = current.name;
+
     ossQuery.vendor = current.value;
 
     vendorList.value = items[0].children;
     if (current.value) {
+      ossQuery.value = current.value;
+      const tmp = vendorList.value.find((item) => item.value === current.value);
+      if (tmp) {
+        // console.log({ tmp, ossQuery })
+        ossQuery.label = tmp.label;
+      }
       handleOssQuery();
     }
-    updateVendorName();
   });
 }
 
@@ -342,13 +345,7 @@ const handleSubmit = useThrottleFn(() => {
 const updateCurrentVendor = async () => {
   venderChangeTipsVisible.value = false;
   const current = currentVendor.value;
-  const value = currentVendorValue.value;
-  if (!current || !value) {
-    return;
-  }
-
   loading.value = true;
-  current.value = value;
   await setVendorUpdate(current);
   ElMessage.success("已设置当前服务商");
   await loadOssVendorOptions();

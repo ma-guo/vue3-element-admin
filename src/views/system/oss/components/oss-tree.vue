@@ -18,14 +18,13 @@ import { getVendorList } from "@/api/admin/api";
 
 const props = defineProps({
   modelValue: {
-    type: [String],
-    default: "",
+    type: Object as PropType<AdminCore.StringOptionItem>,
+    default: () => ({}),
   },
 });
 
-const osstList = ref<AdminCore.StringOptions[]>(); // 部门列表
-const ossTreeRef = ref(ElTree); // 部门树
-const deptName = ref(); // 部门名称
+const osstList = ref<AdminCore.StringOptions[]>(); // OSS 列表
+const ossTreeRef = ref(ElTree); // OSS 树
 
 const emits = defineEmits(["node-click"]);
 
@@ -42,7 +41,9 @@ watchEffect(
 
 /** OSS树节点 Click */
 function handleNodeClick(data: { [key: string]: any }) {
-  ossValue.value = data.value;
+  // console.log(data);
+  ossValue.value.value = data.value;
+  ossValue.value.label = data.label;
   emits("node-click");
 }
 

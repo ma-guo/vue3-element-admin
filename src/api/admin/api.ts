@@ -645,14 +645,51 @@ export const setFilesDelete = (
 };
 
 /**
- * 获取文件存储提供商参数
- * @param vendor string 文件存储提供商
- * @returns AdminCore.V1FilesOptionsRsp
+ * 文件下载请求
+ * @param url string 文件URL
+ * @returns AdminCore.NoneRsp
  */
-export const getFilesOptions = (
-  data: AdminCore.V1FilesOptionsReq
-): Promise<Rsp<AdminCore.V1FilesOptionsRsp>> => {
-  return ajax_get("/v1/files/options/", data);
+export const getFilesFetch = (
+  data: AdminCore.V1FileFetchReq
+): Promise<Rsp<AdminCore.NoneRsp>> => {
+  return ajax_get("/v1/files/fetch/", data);
+};
+
+/**
+ * 文件分页请求
+ * @param pageNum number 页码
+ * @param pageSize number 每页数量
+ * @param vendor string 文件存储提供商
+ * @param name string 文件名
+ * @returns AdminCore.V1FilePageRsp
+ */
+export const getFilesPage = (
+  data: AdminCore.V1FilePageReq
+): Promise<Rsp<AdminCore.V1FilePageRsp>> => {
+  return ajax_get("/v1/files/page/", data);
+};
+
+/**
+ * 文件修改弹窗请求
+ * @param id number 文件 ID
+ * @returns AdminCore.V1FileFromRsp
+ */
+export const getFilesForm = (
+  data: AdminCore.V1FileFormReq
+): Promise<Rsp<AdminCore.V1FileFromRsp>> => {
+  return ajax_get("/v1/files/form/", data);
+};
+
+/**
+ * 文件修改请求
+ * @param id number 文件ID
+ * @param name string 文件名
+ * @returns AdminCore.NoneRsp
+ */
+export const setFilesUpdate = (
+  data: AdminCore.V1FileUpdateReq
+): Promise<Rsp<AdminCore.NoneRsp>> => {
+  return ajax_post("/v1/files/update/", data);
 };
 
 /**
