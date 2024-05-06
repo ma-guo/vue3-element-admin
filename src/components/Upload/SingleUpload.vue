@@ -1,13 +1,7 @@
 <template>
   <!-- 上传组件 -->
-  <el-upload
-    v-model="imgUrl"
-    class="single-uploader"
-    :show-file-list="false"
-    list-type="picture-card"
-    :before-upload="handleBeforeUpload"
-    :http-request="uploadFile"
-  >
+  <el-upload v-model="imgUrl" class="single-uploader" :show-file-list="false" list-type="picture-card"
+    :before-upload="handleBeforeUpload" :http-request="uploadFile">
     <img v-if="imgUrl" :src="imgUrl" class="single-uploader__image" />
     <el-icon v-else class="single-uploader__icon"><i-ep-plus /></el-icon>
   </el-upload>

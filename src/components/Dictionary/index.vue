@@ -1,17 +1,6 @@
 <template>
-  <el-select
-    v-model="selectedValue"
-    :placeholder="placeholder"
-    :disabled="disabled"
-    clearable
-    @change="handleChange"
-  >
-    <el-option
-      v-for="option in options"
-      :key="option.value"
-      :label="option.label"
-      :value="option.value"
-    />
+  <el-select v-model="selectedValue" :placeholder="placeholder" :disabled="disabled" clearable @change="handleChange">
+    <el-option v-for="option in options" :key="option.value" :label="option.label" :value="option.value" />
   </el-select>
 </template>
 
