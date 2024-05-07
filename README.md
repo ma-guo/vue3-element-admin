@@ -13,14 +13,14 @@
 
 ## 项目简介
 
-[vue3-element-admin](https://github.com/ma-guo/vue3-element-admin) 是基于 Vue3 + Vite5+ TypeScript5 + Element-Plus + Pinia 等主流技术栈构建的免费开源的后台管理前端模板（配套[后端源码](https://github.com/ma-guo/admin-core/)）。
+[vue3-element-admin](https://github.com/ma-guo/vue3-element-admin) 是基于 Vue3 + Vite5+ TypeScript5 + Element-Plus + Pinia 等主流技术栈构建的免费开源的后台管理前端模板（配套[后端源码 admin-core](https://github.com/ma-guo/admin-core/)）。后端项目建议从 [admin-core-test](https://github.com/ma-guo/admin-core-test) 开始
 
 
 ## 项目特色
 
 - **简洁易用**：基于 [vue-element-admin](https://gitee.com/panjiachen/vue-element-admin) 升级的 Vue3 版本，无过渡封装 ，易上手。
 
-- **数据交互**：同时支持本地 `Mock` 和线上接口，配套 [go 后端源码](https://github.com/ma-guo/admin-core/)和[在线接口文档](https://github.com/ma-guo/admin-core/tree/main/niuhe)。
+- **数据交互**：同时支持本地 `Mock` 和线上接口，配套 [go 后端源码](https://github.com/ma-guo/admin-core/)和[在线接口文档](https://github.com/ma-guo/admin-core-niuhe/tree/main/niuhe)。
 
 - **权限管理**：用户、角色、菜单、字典、部门等完善的权限系统功能。
 
@@ -97,11 +97,10 @@ server {
 
 ## 后端接口
 
-> 如果您具备Java开发基础，按照以下步骤将在线接口转为本地后端接口，创建企业级前后端分离开发环境，助您走向全栈之路。
+> 如果您具备 go 开发基础，按照以下步骤将在线接口转为本地后端接口，创建企业级前后端分离开发环境，助您走向全栈之路。
 
-1. 获取基于 `go` 和 `niuhe` VSCODE 插件开发的后端 [admin-core](https://gitee.com/youlaiorg/youlai-boot.git) 源码。
-2. 根据后端工程的说明文档 [README.md](https://gitee.com/youlaiorg/youlai-boot#%E9%A1%B9%E7%9B%AE%E8%BF%90%E8%A1%8C) 完成本地启动。
-3. 修改 `.env.development` 文件中的 `VITE_APP_API_URL` 的值，将其从 http://vapi.youlai.tech 更改为 http://localhost:8989。
+1. 获取基于 `go` 和 `niuhe` VSCODE 插件开发的后端 [admin-core-test](https://github.com/ma-guo/admin-core-test) 源码。
+2. 修改 `.env.development` 文件中的 `VITE_APP_API_URL` 的值，将其从 http://vapi.youlai.tech 更改为 http://localhost:8989。
 
 
 ## 注意事项
