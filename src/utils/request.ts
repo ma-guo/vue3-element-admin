@@ -33,11 +33,13 @@ service.interceptors.response.use(
     if (response.data instanceof ArrayBuffer) {
       return response;
     }
-
-    ElMessage.error(message || "系统出错");
-    return Promise.reject(new Error(message || "Error"));
+    if (result != 0 && message) {
+      ElMessage.error(message);
+    }
+    return response.data
   },
   (error: any) => {
+    console.log({ error })
     if (error.response.data) {
       const { result, message } = error.response.data;
       // token 过期,重新登录
@@ -56,7 +58,9 @@ service.interceptors.response.use(
         ElMessage.error(message || "系统出错");
       }
     }
-    return Promise.reject(error.message);
+    ElMessage.error(error.message);
+    return Promise.resolve({ result: -1, message: error.message, data: {} })
+    // return Promise.reject(error.message);
   }
 );
 

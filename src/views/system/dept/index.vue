@@ -3,20 +3,11 @@
     <div class="search-container">
       <el-form ref="queryFormRef" :model="queryParams" :inline="true">
         <el-form-item label="关键字" prop="keywords">
-          <el-input
-            v-model="queryParams.keyword"
-            placeholder="部门名称"
-            @keyup.enter="handleQuery"
-          />
+          <el-input v-model="queryParams.keyword" placeholder="部门名称" @keyup.enter="handleQuery" />
         </el-form-item>
 
         <el-form-item label="部门状态" prop="status">
-          <el-select
-            v-model="queryParams.status"
-            placeholder="全部"
-            clearable
-            class="!w-[100px]"
-          >
+          <el-select v-model="queryParams.status" placeholder="全部" clearable class="!w-[100px]">
             <el-option :value="1" label="正常" />
             <el-option :value="0" label="禁用" />
           </el-select>
@@ -33,29 +24,15 @@
 
     <el-card shadow="never" class="table-container">
       <template #header>
-        <el-button
-          v-hasPerm="['sys:dept:add']"
-          type="success"
-          @click="openDialog(0, undefined)"
-          ><i-ep-plus />新增</el-button
-        >
-        <el-button
-          v-hasPerm="['sys:dept:delete']"
-          type="danger"
-          :disabled="ids.length === 0"
-          @click="handleDelete()"
-          ><i-ep-delete />删除
+        <el-button v-hasPerm="['sys:dept:add']" type="success"
+          @click="openDialog(0, undefined)"><i-ep-plus />新增</el-button>
+        <el-button v-hasPerm="['sys:dept:delete']" type="danger" :disabled="ids.length === 0"
+          @click="handleDelete()"><i-ep-delete />删除
         </el-button>
       </template>
 
-      <el-table
-        v-loading="loading"
-        :data="deptList"
-        row-key="id"
-        default-expand-all
-        :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
-        @selection-change="handleSelectionChange"
-      >
+      <el-table v-loading="loading" :data="deptList" row-key="id" default-expand-all
+        :tree-props="{ children: 'children', hasChildren: 'hasChildren' }" @selection-change="handleSelectionChange">
         <el-table-column type="selection" width="55" align="center" />
         <el-table-column prop="name" label="部门名称" min-width="200" />
         <el-table-column prop="status" label="状态" width="100">
@@ -69,29 +46,14 @@
 
         <el-table-column label="操作" fixed="right" align="left" width="200">
           <template #default="scope">
-            <el-button
-              v-hasPerm="['sys:dept:add']"
-              type="primary"
-              link
-              size="small"
-              @click.stop="openDialog(scope.row.id, undefined)"
-              ><i-ep-plus />新增
+            <el-button v-hasPerm="['sys:dept:add']" type="primary" link size="small"
+              @click.stop="openDialog(scope.row.id, undefined)"><i-ep-plus />新增
             </el-button>
-            <el-button
-              v-hasPerm="['sys:dept:edit']"
-              type="primary"
-              link
-              size="small"
-              @click.stop="openDialog(scope.row.parentId, scope.row.id)"
-              ><i-ep-edit />编辑
+            <el-button v-hasPerm="['sys:dept:edit']" type="primary" link size="small"
+              @click.stop="openDialog(scope.row.parentId, scope.row.id)"><i-ep-edit />编辑
             </el-button>
-            <el-button
-              v-hasPerm="['sys:dept:delete']"
-              type="primary"
-              link
-              size="small"
-              @click.stop="handleDelete(scope.row.id)"
-            >
+            <el-button v-hasPerm="['sys:dept:delete']" type="primary" link size="small"
+              @click.stop="handleDelete(scope.row.id)">
               <i-ep-delete />删除
             </el-button>
           </template>
@@ -99,38 +61,17 @@
       </el-table>
     </el-card>
 
-    <el-dialog
-      v-model="dialog.visible"
-      :title="dialog.title"
-      width="600px"
-      @closed="closeDialog"
-    >
-      <el-form
-        ref="deptFormRef"
-        :model="formData"
-        :rules="rules"
-        label-width="80px"
-      >
+    <el-dialog v-model="dialog.visible" :title="dialog.title" width="600px" @closed="closeDialog">
+      <el-form ref="deptFormRef" :model="formData" :rules="rules" label-width="80px">
         <el-form-item label="上级部门" prop="parentId">
-          <el-tree-select
-            v-model="formData.parentId"
-            placeholder="选择上级部门"
-            :data="deptOptions"
-            filterable
-            check-strictly
-            :render-after-expand="false"
-          />
+          <el-tree-select v-model="formData.parentId" placeholder="选择上级部门" :data="deptOptions" filterable check-strictly
+            :render-after-expand="false" />
         </el-form-item>
         <el-form-item label="部门名称" prop="name">
           <el-input v-model="formData.name" placeholder="请输入部门名称" />
         </el-form-item>
         <el-form-item label="显示排序" prop="sort">
-          <el-input-number
-            v-model="formData.sort"
-            controls-position="right"
-            style="width: 100px"
-            :min="0"
-          />
+          <el-input-number v-model="formData.sort" controls-position="right" style="width: 100px" :min="0" />
         </el-form-item>
         <el-form-item label="部门状态">
           <el-radio-group v-model="formData.status">
@@ -198,12 +139,13 @@ const rules = reactive({
 });
 
 /** 查询 */
-function handleQuery() {
+const handleQuery = async () => {
   loading.value = true;
-  getDeptList(queryParams).then(({ data }) => {
-    deptList.value = data.items;
-    loading.value = false;
-  });
+  const rsp = await getDeptList(queryParams);
+  loading.value = false;
+  if (rsp.result == 0) {
+    deptList.value = rsp.data.items;
+  }
 }
 
 /**重置查询 */
@@ -218,16 +160,15 @@ function handleSelectionChange(selection: any) {
 }
 
 /** 获取部门下拉数据  */
-async function loadDeptOptions() {
-  getDeptOptions({}).then((response) => {
-    deptOptions.value = [
-      {
-        value: 0,
-        label: "顶级部门",
-        children: response.data.items,
-      },
-    ];
-  });
+const loadDeptOptions = async () => {
+  const rsp = await getDeptOptions({});
+  if (rsp.result == 0) {
+    deptOptions.value = [{
+      value: 0,
+      label: "顶级部门",
+      children: rsp.data.items,
+    }];
+  }
 }
 
 /**
@@ -236,14 +177,16 @@ async function loadDeptOptions() {
  * @param parentId 父部门ID
  * @param deptId 部门ID
  */
-async function openDialog(parentId?: number, deptId?: number) {
+const openDialog = async (parentId?: number, deptId?: number) => {
   await loadDeptOptions();
   dialog.visible = true;
   if (deptId) {
     dialog.title = "修改部门";
-    getDeptForm({ id: deptId }).then(({ data }) => {
-      Object.assign(formData, data);
-    });
+    const rsp = await getDeptForm({ id: deptId });
+    loading.value = false;
+    if (rsp.result == 0) {
+      Object.assign(formData, rsp.data);
+    }
   } else {
     dialog.title = "新增部门";
     formData.parentId = parentId ?? 0;
@@ -252,26 +195,29 @@ async function openDialog(parentId?: number, deptId?: number) {
 
 /** 表单提交 */
 function handleSubmit() {
-  deptFormRef.value.validate((valid: any) => {
+  deptFormRef.value.validate(async (valid: any) => {
     if (valid) {
       const deptId = formData.id;
       loading.value = true;
       if (deptId) {
-        setDeptUpdate(formData)
-          .then(() => {
-            ElMessage.success("修改成功");
-            closeDialog();
-            handleQuery();
-          })
-          .finally(() => (loading.value = false));
+        const rsp = await setDeptUpdate(formData);
+        loading.value = false
+        if (rsp.result != 0) {
+          return;
+        }
+        ElMessage.success("修改成功");
+        closeDialog();
+        handleQuery();
+
       } else {
-        setDeptAdd(formData)
-          .then(() => {
-            ElMessage.success("新增成功");
-            closeDialog();
-            handleQuery();
-          })
-          .finally(() => (loading.value = false));
+        const rsp = await setDeptAdd(formData);
+        loading.value = false;
+        if (rsp.result != 0) {
+          return;
+        }
+        ElMessage.success("新增成功");
+        closeDialog();
+        handleQuery();
       }
     }
   });

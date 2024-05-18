@@ -15,55 +15,44 @@ export const useUserStore = defineStore("user", () => {
    * @param {AdminCore.AuthLoginReq}
    * @returns
    */
-  function login(loginData: AdminCore.AuthLoginReq) {
-    return new Promise<void>((resolve, reject) => {
-      setAuthLogin(loginData)
-        .then((response) => {
-          const { tokenType, accessToken } = response.data;
-          // Bearer eyJhbGciOiJIUzI1NiJ9.xxx.xxx
-          localStorage.setItem("accessToken", tokenType + " " + accessToken);
-          resolve();
-        })
-        .catch((error) => {
-          reject(error);
-        });
-    });
+  const login = async (loginData: AdminCore.AuthLoginReq) => {
+    const rsp = await setAuthLogin(loginData);
+    if (rsp.result == 0) {
+      const { tokenType, accessToken } = rsp.data;
+      localStorage.setItem("accessToken", tokenType + " " + accessToken);
+    }
+    return rsp
   }
 
   // 获取信息(用户昵称、头像、角色集合、权限集合)
   function getUserInfo() {
-    return new Promise<UserInfo>((resolve, reject) => {
-      getUsersMe({})
-        .then(({ data }) => {
-          if (!data) {
-            reject("Verification failed, please Login again.");
-            return;
-          }
-          if (!data.roles || data.roles.length <= 0) {
-            reject("getUserInfo: roles must be a non-null array!");
-            return;
-          }
-          Object.assign(user.value, { ...data });
-          resolve(data);
-        })
-        .catch((error) => {
-          reject(error);
-        });
+    return new Promise<UserInfo>(async (resolve, reject) => {
+      const { result, message, data } = await getUsersMe({});
+      if (result != 0) {
+        return reject(message);
+      }
+
+      if (!data.roles || data.roles.length <= 0) {
+        reject("getUserInfo: roles must be a non-null array!");
+        return;
+      }
+      Object.assign(user.value, { ...data });
+      resolve(data);
+
     });
   }
 
   // user logout
   function logout() {
-    return new Promise<void>((resolve, reject) => {
-      setAuthLogout({})
-        .then(() => {
-          localStorage.setItem("accessToken", "");
-          location.reload(); // 清空路由
-          resolve();
-        })
-        .catch((error) => {
-          reject(error);
-        });
+    return new Promise<void>(async (resolve, reject) => {
+      const rsp = await setAuthLogout({});
+      if (rsp.result != 0) {
+        reject(rsp.message);
+        return;
+      }
+      localStorage.setItem("accessToken", "");
+      location.reload(); // 清空路由
+      resolve();
     });
   }
 

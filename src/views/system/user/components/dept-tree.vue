@@ -7,16 +7,9 @@
       </template>
     </el-input>
 
-    <el-tree
-      ref="deptTreeRef"
-      class="mt-2"
-      :data="deptList"
-      :props="{ children: 'children', label: 'label', disabled: '' }"
-      :expand-on-click-node="false"
-      :filter-node-method="handleFilter"
-      default-expand-all
-      @node-click="handleNodeClick"
-    />
+    <el-tree ref="deptTreeRef" class="mt-2" :data="deptList"
+      :props="{ children: 'children', label: 'label', disabled: '' }" :expand-on-click-node="false"
+      :filter-node-method="handleFilter" default-expand-all @node-click="handleNodeClick" />
   </el-card>
 </template>
 
@@ -61,9 +54,10 @@ function handleNodeClick(data: { [key: string]: any }) {
   emits("node-click");
 }
 
-onBeforeMount(() => {
-  getDeptOptions({}).then((response) => {
-    deptList.value = response.data.items;
-  });
+onBeforeMount(async () => {
+  const rsp = await getDeptOptions({});
+  if (rsp.result === 0) {
+    deptList.value = rsp.data.items;
+  }
 });
 </script>

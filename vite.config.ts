@@ -128,9 +128,9 @@ export default defineConfig(({ mode }: ConfigEnv): UserConfig => {
         // 指定symbolId格式
         symbolId: "icon-[dir]-[name]",
       }),
-      VueDevTools({
-        openInEditorHost: `http://localhost:${env.VITE_APP_PORT}`,
-      }),
+      // VueDevTools({
+      //   openInEditorHost: `http://localhost:${env.VITE_APP_PORT}`,
+      // }),
     ],
     // 预加载项目必需的组件
     optimizeDeps: {

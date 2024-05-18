@@ -290,16 +290,14 @@ const rules = reactive({
 });
 
 /** 查询 */
-function handleQuery() {
+const handleQuery = async () => {
   loading.value = true;
-  getUsersPage(queryParams)
-    .then(({ data }) => {
-      pageData.value = data.list;
-      total.value = data.total;
-    })
-    .finally(() => {
-      loading.value = false;
-    });
+  const rsp = await getUsersPage(queryParams);
+  loading.value = false;
+  if (rsp.result === 0) {
+    pageData.value = rsp.data.list;
+    total.value = rsp.data.total;
+  }
 }
 
 /** 重置查询 */
@@ -327,29 +325,32 @@ function resetPassword(row: { [key: string]: any }) {
       confirmButtonText: "确定",
       cancelButtonText: "取消",
     }
-  ).then(({ value }) => {
+  ).then(async ({ value }) => {
     if (!value) {
       ElMessage.warning("请输入新密码");
       return false;
     }
-    setUsersPassword({ userId: row.id, password: value }).then(() => {
+    const rsp = await setUsersPassword({ userId: row.id, password: value });
+    if (rsp.result === 0) {
       ElMessage.success("密码重置成功，新密码是：" + value);
-    });
+    }
   });
 }
 
 /** 加载角色下拉数据源 */
-async function loadRoleOptions() {
-  getRolesOptions({}).then((response) => {
-    roleList.value = response.data.items;
-  });
+const loadRoleOptions = async () => {
+  const rsp = await getRolesOptions({});
+  if (rsp.result === 0) {
+    roleList.value = rsp.data.items;
+  }
 }
 
 /** 加载部门下拉数据源 */
-async function loadDeptOptions() {
-  getDeptOptions({}).then((response) => {
-    deptList.value = response.data.items;
-  });
+const loadDeptOptions = async () => {
+  const rsp = await getDeptOptions({});
+  if (rsp.result === 0) {
+    deptList.value = rsp.data.items;
+  }
 }
 
 /**
@@ -358,7 +359,7 @@ async function loadDeptOptions() {
  * @param type 弹窗类型  用户表单：user-form | 用户导入：user-import
  * @param id 用户ID
  */
-async function openDialog(type: string, id?: number) {
+const openDialog = async (type: string, id?: number) => {
   dialog.visible = true;
   dialog.type = type;
 
@@ -368,9 +369,10 @@ async function openDialog(type: string, id?: number) {
     await loadRoleOptions();
     if (id) {
       dialog.title = "修改用户";
-      getUsersForm({ userId: id }).then(({ data }) => {
-        Object.assign(formData, { ...data });
-      });
+      const rsp = await getUsersForm({ userId: id });
+      if (rsp.result === 0) {
+        Object.assign(formData, { ...rsp.data });
+      }
     } else {
       dialog.title = "新增用户";
     }
@@ -402,28 +404,28 @@ function closeDialog() {
 }
 
 /** 表单提交 */
-const handleSubmit = useThrottleFn(() => {
+const handleSubmit = useThrottleFn(async () => {
   if (dialog.type === "user-form") {
-    userFormRef.value.validate((valid: any) => {
+    userFormRef.value.validate(async (valid: any) => {
       if (valid) {
         const userId = formData.id;
         loading.value = true;
         if (userId) {
-          setUsersUpdate(formData)
-            .then(() => {
-              ElMessage.success("修改用户成功");
-              closeDialog();
-              resetQuery();
-            })
-            .finally(() => (loading.value = false));
+          const rsp = await setUsersUpdate(formData);
+          loading.value = false;
+          if (rsp.result === 0) {
+            ElMessage.success("修改用户成功");
+            closeDialog();
+            resetQuery();
+          }
         } else {
-          setUsersAdd(formData)
-            .then(() => {
-              ElMessage.success("新增用户成功");
-              closeDialog();
-              resetQuery();
-            })
-            .finally(() => (loading.value = false));
+          const rsp = await setUsersAdd(formData);
+          loading.value = false;
+          if (rsp.result === 0) {
+            ElMessage.success("新增用户成功");
+            closeDialog();
+            resetQuery();
+          }
         }
       }
     });
@@ -456,11 +458,12 @@ function handleDelete(id?: number) {
     confirmButtonText: "确定",
     cancelButtonText: "取消",
     type: "warning",
-  }).then(function () {
-    setUsersDelete({ ids: userIds }).then(() => {
+  }).then(async function () {
+    const rsp = await setUsersDelete({ ids: userIds });
+    if (rsp.result === 0) {
       ElMessage.success("删除成功");
       resetQuery();
-    });
+    }
   });
 }
 

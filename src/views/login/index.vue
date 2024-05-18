@@ -2,13 +2,7 @@
   <div class="login-container">
     <!-- 顶部 -->
     <div class="absolute-lt flex-x-end p-3 w-full">
-      <el-switch
-        v-model="isDark"
-        inline-prompt
-        :active-icon="Moon"
-        :inactive-icon="Sunny"
-        @change="toggleTheme"
-      />
+      <el-switch v-model="isDark" inline-prompt :active-icon="Moon" :inactive-icon="Sunny" @change="toggleTheme" />
       <lang-select class="ml-2 cursor-pointer" />
     </div>
     <!-- 登录表单 -->
@@ -18,47 +12,23 @@
         <el-tag class="ml-2 absolute-rt">{{ defaultSettings.version }}</el-tag>
       </div>
 
-      <el-form
-        ref="loginFormRef"
-        :model="loginData"
-        :rules="loginRules"
-        class="login-form"
-      >
+      <el-form ref="loginFormRef" :model="loginData" :rules="loginRules" class="login-form">
         <!-- 用户名 -->
         <el-form-item prop="username">
           <div class="flex-y-center w-full">
             <svg-icon icon-class="user" class="mx-2" />
-            <el-input
-              ref="username"
-              v-model="loginData.username"
-              :placeholder="$t('login.username')"
-              name="username"
-              size="large"
-              class="h-[48px]"
-            />
+            <el-input ref="username" v-model="loginData.username" :placeholder="$t('login.username')" name="username"
+              size="large" class="h-[48px]" />
           </div>
         </el-form-item>
 
         <!-- 密码 -->
-        <el-tooltip
-          :visible="isCapslock"
-          :content="$t('login.capsLock')"
-          placement="right"
-        >
+        <el-tooltip :visible="isCapslock" :content="$t('login.capsLock')" placement="right">
           <el-form-item prop="password">
             <div class="flex-y-center w-full">
               <svg-icon icon-class="lock" class="mx-2" />
-              <el-input
-                v-model="loginData.password"
-                :placeholder="$t('login.password')"
-                type="password"
-                name="password"
-                @keyup="checkCapslock"
-                @keyup.enter="handleLogin"
-                size="large"
-                class="h-[48px] pr-2"
-                show-password
-              />
+              <el-input v-model="loginData.password" :placeholder="$t('login.password')" type="password" name="password"
+                @keyup="checkCapslock" @keyup.enter="handleLogin" size="large" class="h-[48px] pr-2" show-password />
             </div>
           </el-form-item>
         </el-tooltip>
@@ -67,46 +37,25 @@
         <el-form-item prop="captchaCode">
           <div class="flex-y-center w-full">
             <svg-icon icon-class="captcha" class="mx-2" />
-            <el-input
-              v-model="loginData.captchaCode"
-              auto-complete="off"
-              size="large"
-              class="flex-1"
-              :placeholder="$t('login.captchaCode')"
-              @keyup.enter="handleLogin"
-            />
+            <el-input v-model="loginData.captchaCode" auto-complete="off" size="large" class="flex-1"
+              :placeholder="$t('login.captchaCode')" @keyup.enter="handleLogin" />
 
-            <el-image
-              @click="getCaptcha"
-              :src="captchaBase64"
-              class="rounded-tr-md rounded-br-md cursor-pointer h-[48px]"
-            />
+            <el-image @click="getCaptcha" :src="captchaBase64"
+              class="rounded-tr-md rounded-br-md cursor-pointer h-[48px]" />
           </div>
         </el-form-item>
 
         <!-- 登录按钮 -->
-        <el-button
-          :loading="loading"
-          type="primary"
-          size="large"
-          class="w-full"
-          @click.prevent="handleLogin"
-          >{{ $t("login.login") }}
+        <el-button :loading="loading" type="primary" size="large" class="w-full" @click.prevent="handleLogin">{{
+        $t("login.login") }}
         </el-button>
-
-        <!-- 账号密码提示 -->
-        <div class="mt-10 text-sm">
-          <span>{{ $t("login.username") }}: admin</span>
-          <span class="ml-4"> {{ $t("login.password") }}: 123456</span>
-        </div>
       </el-form>
     </el-card>
 
     <!-- ICP备案 -->
     <div class="absolute bottom-1 text-[10px] text-center" v-show="icpVisible">
       <p>
-        Copyright © 2021 - 2024 youlai.tech All Rights Reserved. 有来技术
-        版权所有
+        Copyright © 2021 - 2024 {{ $t('login.company') }} {{ $t('login.copyright') }}
       </p>
       <p>皖ICP备20006496号-3</p>
     </div>
@@ -184,44 +133,41 @@ const loginRules = computed(() => {
 /**
  * 获取验证码
  */
-function getCaptcha() {
-  getAuthCaptcha({}).then(({ data }) => {
-    loginData.value.captchaKey = data.captchaKey;
-    captchaBase64.value = data.captchaBase64;
-  });
+const getCaptcha = async () => {
+  const rsp = await getAuthCaptcha({});
+  if (rsp.result == 0) {
+    loginData.value.captchaKey = rsp.data.captchaKey;
+    captchaBase64.value = rsp.data.captchaBase64;
+  }
 }
 
 /**
  * 登录
  */
 const route = useRoute();
-function handleLogin() {
-  loginFormRef.value.validate((valid: boolean) => {
+const handleLogin = async () => {
+  loginFormRef.value.validate(async (valid: boolean) => {
     if (valid) {
       loading.value = true;
-      userStore
-        .login(loginData.value)
-        .then(() => {
-          const query: LocationQuery = route.query;
-          const redirect = (query.redirect as LocationQueryValue) ?? "/";
-          const otherQueryParams = Object.keys(query).reduce(
-            (acc: any, cur: string) => {
-              if (cur !== "redirect") {
-                acc[cur] = query[cur];
-              }
-              return acc;
-            },
-            {}
-          );
+      const rsp = await userStore.login(loginData.value)
+      loading.value = false;
+      if (rsp.result == 0) {
+        const query: LocationQuery = route.query;
+        const redirect = (query.redirect as LocationQueryValue) ?? "/";
+        const otherQueryParams = Object.keys(query).reduce(
+          (acc: any, cur: string) => {
+            if (cur !== "redirect") {
+              acc[cur] = query[cur];
+            }
+            return acc;
+          },
+          {}
+        );
+        router.push({ path: redirect, query: otherQueryParams });
+      } else {
+        getCaptcha();
+      }
 
-          router.push({ path: redirect, query: otherQueryParams });
-        })
-        .catch(() => {
-          getCaptcha();
-        })
-        .finally(() => {
-          loading.value = false;
-        });
     }
   });
 }
@@ -231,8 +177,7 @@ function handleLogin() {
  */
 
 const toggleTheme = () => {
-  const newTheme =
-    settingsStore.theme === ThemeEnum.DARK ? ThemeEnum.LIGHT : ThemeEnum.DARK;
+  const newTheme = settingsStore.theme === ThemeEnum.DARK ? ThemeEnum.LIGHT : ThemeEnum.DARK;
   settingsStore.changeTheme(newTheme);
 };
 /**
