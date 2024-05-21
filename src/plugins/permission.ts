@@ -2,6 +2,7 @@ import router from "@/router";
 import defaultSettings from "@/settings";
 import { useUserStore, usePermissionStore, useSettingsStore } from "@/store";
 import NProgress from "@/utils/nprogress";
+import { ca } from "element-plus/es/locale";
 import { RouteRecordRaw } from "vue-router";
 const settingsStore = useSettingsStore();
 
@@ -19,8 +20,7 @@ export function setupPermission() {
         NProgress.done();
       } else {
         const userStore = useUserStore();
-        const hasRoles =
-          userStore.user.roles && userStore.user.roles.length > 0;
+        const hasRoles = userStore.user.roles && userStore.user.roles.length > 0;
         if (hasRoles) {
           // 未匹配到任何路由，跳转404
           if (to.matched.length === 0) {
@@ -59,6 +59,7 @@ export function setupPermission() {
   });
 
   router.afterEach(() => {
+    console.log('after route change')
     NProgress.done();
   });
 }

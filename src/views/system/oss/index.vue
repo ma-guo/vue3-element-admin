@@ -12,24 +12,14 @@
         <div class="search-container">
           <el-form ref="queryFormRef" :model="queryParams" :inline="true">
             <el-form-item label="当前选用服务商" prop="status">
-              <el-select
-                v-model="currentVendor.value"
-                placeholder="全部"
-                class="!w-[140px]"
-              >
-                <el-option
-                  v-for="item in vendorList"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value"
-                />
+              <el-select v-model="currentVendor.value" placeholder="全部" class="!w-[140px]">
+                <el-option v-for="item in vendorList" :key="item.value" :label="item.label" :value="item.value" />
               </el-select>
             </el-form-item>
             <el-form-item>
               <el-button type="info" @click="venderChangeTipsVisible = true">
                 <el-icon><Select /></el-icon>
-                选用当前服务商</el-button
-              >
+                选用当前服务商</el-button>
             </el-form-item>
           </el-form>
         </div>
@@ -39,9 +29,7 @@
             <div class="flex justify-between">
               <div class="row">
                 OSS [{{ ossQuery.label }}] 配置信息
-                <el-button type="primary" @click="loadOssVendorOptions"
-                  ><i-ep-search />刷新</el-button
-                >
+                <el-button type="primary" @click="loadOssVendorOptions"><i-ep-search />刷新</el-button>
               </div>
             </div>
           </template>
@@ -52,22 +40,11 @@
 
             <el-table-column label="配置值" align="center" prop="value" />
             <el-table-column label="备注" align="center" prop="remark" />
-            <el-table-column
-              label="更新时间"
-              align="center"
-              prop="updateTime"
-              width="160"
-            />
+            <el-table-column label="更新时间" align="center" prop="updateTime" width="160" />
             <el-table-column label="操作" fixed="right" width="80">
               <template #default="scope">
-                <el-button
-                  v-hasPerm="['sys:oss:edit']"
-                  type="primary"
-                  link
-                  size="small"
-                  @click="openDialog('user-form', scope.row.id)"
-                  ><i-ep-edit />编辑</el-button
-                >
+                <el-button v-hasPerm="['sys:oss:edit']" type="primary" link size="small"
+                  @click="openDialog('user-form', scope.row.id)"><i-ep-edit />编辑</el-button>
               </template>
             </el-table-column>
           </el-table>
@@ -76,51 +53,18 @@
     </el-row>
 
     <!-- 弹窗 -->
-    <el-dialog
-      v-model="dialog.visible"
-      :title="dialog.title"
-      :width="dialog.width"
-      append-to-body
-      @close="closeDialog"
-    >
+    <el-dialog v-model="dialog.visible" :title="dialog.title" :width="dialog.width" append-to-body @close="closeDialog">
       <!-- 用户新增/编辑表单 -->
-      <el-form
-        v-if="dialog.type === 'user-form'"
-        ref="userFormRef"
-        :model="formData"
-        :rules="rules"
-        label-width="80px"
-      >
+      <el-form v-if="dialog.type === 'user-form'" ref="userFormRef" :model="formData" :rules="rules" label-width="80px">
         <el-form-item label="配置名" prop="name">
-          <el-input
-            v-model="formData.name"
-            :readonly="true"
-            placeholder="配置名"
-          />
+          <el-input v-model="formData.name" :readonly="true" placeholder="配置名" />
         </el-form-item>
-        <el-form-item
-          label="配置值"
-          prop="value"
-          v-if="!formOptions || formOptions.length == 0"
-        >
+        <el-form-item label="配置值" prop="value" v-if="!formOptions || formOptions.length == 0">
           <el-input v-model="formData.value" placeholder="请输入配置值" />
         </el-form-item>
-        <el-form-item
-          label="配置值"
-          prop="value"
-          v-if="formOptions && formOptions.length > 0"
-        >
-          <el-select
-            v-model="formData.value"
-            placeholder="选择配置值"
-            class="!w-[200px]"
-          >
-            <el-option
-              v-for="item in formOptions"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-            />
+        <el-form-item label="配置值" prop="value" v-if="formOptions && formOptions.length > 0">
+          <el-select v-model="formData.value" placeholder="选择配置值" class="!w-[200px]">
+            <el-option v-for="item in formOptions" :key="item.value" :label="item.label" :value="item.value" />
           </el-select>
         </el-form-item>
         <el-form-item label="备注" prop="remark">
@@ -135,16 +79,9 @@
         </div>
       </template>
     </el-dialog>
-    <el-dialog
-      v-model="venderChangeTipsVisible"
-      title="切换确认"
-      width="500"
-      align-center
-    >
-      <span
-        >切换服务商前请确认参数已配置正确, 同时旧参数勿删除,
-        否则无法操作旧文件。 请谨慎操作</span
-      >
+    <el-dialog v-model="venderChangeTipsVisible" title="切换确认" width="500" align-center>
+      <span>切换服务商前请确认参数已配置正确, 同时旧参数勿删除,
+        否则无法操作旧文件。 请谨慎操作</span>
       <template #footer>
         <div class="dialog-footer">
           <el-button @click="venderChangeTipsVisible = false">不切换</el-button>
@@ -251,17 +188,15 @@ const rules = reactive({
   remark: [{ required: true, message: "配置名不能为空", trigger: "blur" }],
 });
 
-function handleOssQuery() {
+const handleOssQuery = async () => {
   loading.value = true;
   ossQuery.vendor = ossQuery.value;
-  getVendorPage(ossQuery)
-    .then(({ data }) => {
-      ossList.value = data.items;
-      total.value = data.total;
-    })
-    .finally(() => {
-      loading.value = false;
-    });
+  const rsp = await getVendorPage(ossQuery);
+  loading.value = false;
+  if (rsp.result == 0) {
+    ossList.value = rsp.data.items;
+    total.value = rsp.data.total;
+  }
 }
 
 /** 重置查询 */
@@ -270,24 +205,26 @@ function resetQuery() {
   handleOssQuery();
 }
 
-async function loadOssVendorOptions() {
-  getVendorList({}).then((rsp) => {
-    const { current, items } = rsp.data;
-    currentVendor.value = current;
+const loadOssVendorOptions = async () => {
+  const rsp = await getVendorList({});
+  if (rsp.result != 0) {
+    return;
+  }
+  const { current, items } = rsp.data;
+  currentVendor.value = current;
 
-    ossQuery.vendor = current.value;
+  ossQuery.vendor = current.value;
 
-    vendorList.value = items[0].children;
-    if (current.value) {
-      ossQuery.value = current.value;
-      const tmp = vendorList.value.find((item) => item.value === current.value);
-      if (tmp) {
-        // console.log({ tmp, ossQuery })
-        ossQuery.label = tmp.label;
-      }
-      handleOssQuery();
+  vendorList.value = items[0].children;
+  if (current.value) {
+    ossQuery.value = current.value;
+    const tmp = vendorList.value.find((item) => item.value === current.value);
+    if (tmp) {
+      // console.log({ tmp, ossQuery })
+      ossQuery.label = tmp.label;
     }
-  });
+    handleOssQuery();
+  }
 }
 
 /**
@@ -296,16 +233,18 @@ async function loadOssVendorOptions() {
  * @param type 弹窗类型  用户表单：user-form | 用户导入：user-import
  * @param id 用户ID
  */
-async function openDialog(type: string, id: number) {
+const openDialog = async (type: string, id: number) => {
   dialog.visible = true;
   dialog.type = type;
 
   dialog.title = "修改配置";
-  getVendorForm({ id }).then(({ data }) => {
-    const item = data.item;
-    formOptions.value = data.options;
-    Object.assign(formData, { ...item });
-  });
+  const rsp = await getVendorForm({ id });
+  if (rsp.result != 0) {
+    return;
+  }
+  const item = rsp.data.item;
+  formOptions.value = rsp.data.options;
+  Object.assign(formData, { ...item });
 }
 
 /**
@@ -326,18 +265,16 @@ function closeDialog() {
 
 /** 表单提交 */
 const handleSubmit = useThrottleFn(() => {
-  userFormRef.value.validate((valid: any) => {
+  userFormRef.value.validate(async (valid: any) => {
     if (valid) {
       loading.value = true;
-      setVendorUpdate({
-        ...formData,
-      })
-        .then(() => {
-          ElMessage.success("配置修改成功");
-          closeDialog();
-          resetQuery();
-        })
-        .finally(() => (loading.value = false));
+      const rsp = await setVendorUpdate(formData);
+      loading.value = false;
+      if (rsp.result == 0) {
+        ElMessage.success("配置修改成功");
+        closeDialog();
+        handleOssQuery();
+      }
     }
   });
 }, 3000);

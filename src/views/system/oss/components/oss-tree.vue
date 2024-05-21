@@ -1,15 +1,9 @@
 <!-- OSS 树 -->
 <template>
   <el-card shadow="never">
-    <el-tree
-      ref="deptTreeRef"
-      class="mt-2"
-      :data="osstList"
-      :props="{ children: 'children', label: 'label', disabled: '' }"
-      :expand-on-click-node="false"
-      default-expand-all
-      @node-click="handleNodeClick"
-    />
+    <el-tree ref="deptTreeRef" class="mt-2" :data="osstList"
+      :props="{ children: 'children', label: 'label', disabled: '' }" :expand-on-click-node="false" default-expand-all
+      @node-click="handleNodeClick" />
   </el-card>
 </template>
 
@@ -47,9 +41,12 @@ function handleNodeClick(data: { [key: string]: any }) {
   emits("node-click");
 }
 
-onBeforeMount(() => {
-  getVendorList({}).then((rsp) => {
+onBeforeMount(async () => {
+  const rsp = await getVendorList({});
+  if (rsp.result == 0) {
     osstList.value = rsp.data.items;
-  });
+  } else {
+    osstList.value = [];
+  }
 });
 </script>

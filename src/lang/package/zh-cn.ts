@@ -1,4 +1,5 @@
 export default {
+  title: 'vue3-element-admin',
   // 路由国际化
   route: {
     dashboard: "首页",
@@ -6,6 +7,8 @@ export default {
   },
   // 登录页面国际化
   login: {
+    copyright: '版权所有',
+    company: '有来技术',
     username: "用户名",
     password: "密码",
     login: "登 录",

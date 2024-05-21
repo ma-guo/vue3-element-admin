@@ -112,16 +112,14 @@ const rules = reactive({
 });
 
 /** 查询 */
-function handleQuery() {
+const handleQuery = async () => {
   loading.value = true;
-  getFilesPage(queryParams)
-    .then(({ data }) => {
-      fileItems.value = data.items;
-      total.value = data.total;
-    })
-    .finally(() => {
-      loading.value = false;
-    });
+  const rsp = await getFilesPage(queryParams);
+  loading.value = false;
+  if (rsp.result == 0) {
+    fileItems.value = rsp.data.items;
+    total.value = rsp.data.total;
+  }
 }
 /** 重置查询 */
 function resetQuery() {
@@ -136,28 +134,29 @@ function handleSelectionChange(selection: any) {
 }
 
 /** 打开角色表单弹窗 */
-function openDialog(roleId: number) {
+const openDialog = async (roleId: number) => {
   dialog.visible = true;
   dialog.title = "修改文件名";
-  getFilesForm({ id: roleId }).then(({ data }) => {
-    Object.assign(formData, data);
-  });
+  const rsp = await getFilesForm({ id: roleId });
+  if (rsp.result == 0) {
+    Object.assign(formData, rsp.data);
+  }
 }
 
 /** 角色保存提交 */
 function handleSubmit() {
-  fileFormRef.value.validate((valid: any) => {
+  fileFormRef.value.validate(async (valid: any) => {
     if (valid) {
       loading.value = true;
       const roleId = formData.id;
       if (roleId) {
-        setFilesUpdate(formData)
-          .then(() => {
-            ElMessage.success("修改成功");
-            closeDialog();
-            resetQuery();
-          })
-          .finally(() => (loading.value = false));
+        const rsp = await setFilesUpdate(formData);
+        loading.value = false
+        if (rsp.result == 0) {
+          ElMessage.success("修改成功");
+          closeDialog();
+          resetQuery();
+        }
       } else {
         loading.value = false;
       }
@@ -187,14 +186,14 @@ function handleDelete(filePath: string) {
     confirmButtonText: "确定",
     cancelButtonText: "取消",
     type: "warning",
-  }).then(() => {
+  }).then(async () => {
     loading.value = true;
-    setFilesDelete({ filePath })
-      .then(() => {
-        ElMessage.success("删除成功");
-        resetQuery();
-      })
-      .finally(() => (loading.value = false));
+    const rsp = await setFilesDelete({ filePath });
+    loading.value = false;
+    if (rsp.result == 0) {
+      ElMessage.success("删除成功");
+      resetQuery();
+    }
   });
 }
 
