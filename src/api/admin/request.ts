@@ -99,3 +99,11 @@ export const ajax_post = (path: string, data: {}): Promise<any> => {
   //   data: data,
   // });
 };
+
+export const ajax_any = (method: string, path: string, data: {}): Promise<any> => {
+  return originRequest({
+    method: method,
+    url: "/api" + path,
+    data: data,
+  });
+};
