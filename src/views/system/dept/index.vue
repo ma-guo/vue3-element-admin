@@ -61,7 +61,7 @@
       </el-table>
     </el-card>
 
-    <el-dialog v-model="dialog.visible" :title="dialog.title" width="600px" @closed="closeDialog">
+    <el-dialog v-model="dialog.visible" :title="dialog.title" @closed="closeDialog">
       <el-form ref="deptFormRef" :model="formData" :rules="rules" label-width="80px">
         <el-form-item label="上级部门" prop="parentId">
           <el-tree-select v-model="formData.parentId" placeholder="选择上级部门" :data="deptOptions" filterable check-strictly
@@ -75,8 +75,8 @@
         </el-form-item>
         <el-form-item label="部门状态">
           <el-radio-group v-model="formData.status">
-            <el-radio :label="1">正常</el-radio>
-            <el-radio :label="0">禁用</el-radio>
+            <el-radio :value="1">正常</el-radio>
+            <el-radio :value="0">禁用</el-radio>
           </el-radio-group>
         </el-form-item>
       </el-form>

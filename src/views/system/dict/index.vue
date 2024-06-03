@@ -47,7 +47,7 @@
         v-model:limit="queryParams.pageSize" @pagination="handleQuery" />
     </el-card>
 
-    <el-dialog v-model="dialog.visible" :title="dialog.title" width="500px" @close="closeDialog">
+    <el-dialog v-model="dialog.visible" :title="dialog.title" @close="closeDialog">
       <el-form ref="dataFormRef" :model="formData" :rules="rules" label-width="80px">
         <el-form-item label="字典名称" prop="name">
           <el-input v-model="formData.name" placeholder="请输入字典名称" />
@@ -57,8 +57,8 @@
         </el-form-item>
         <el-form-item label="状态" prop="status">
           <el-radio-group v-model="formData.status">
-            <el-radio :label="1">正常</el-radio>
-            <el-radio :label="0">停用</el-radio>
+            <el-radio :value="1">正常</el-radio>
+            <el-radio :value="0">停用</el-radio>
           </el-radio-group>
         </el-form-item>
         <el-form-item label="备注" prop="remark">
@@ -75,7 +75,7 @@
     </el-dialog>
 
     <!--字典数据弹窗-->
-    <el-dialog v-model="dictDataDialog.visible" :title="dictDataDialog.title" width="1000px" @close="closeDictDialog">
+    <el-dialog v-model="dictDataDialog.visible" :title="dictDataDialog.title" @close="closeDictDialog">
       <dict-item v-model:typeCode="selectedDictType.typeCode" v-model:typeName="selectedDictType.typeName" />
     </el-dialog>
   </div>

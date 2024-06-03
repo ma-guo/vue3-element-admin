@@ -102,7 +102,7 @@
     </el-row>
 
     <!-- 弹窗 -->
-    <el-dialog v-model="dialog.visible" :title="dialog.title" :width="dialog.width" append-to-body @close="closeDialog">
+    <el-dialog v-model="dialog.visible" :title="dialog.title" append-to-body @close="closeDialog">
       <!-- 用户新增/编辑表单 -->
       <el-form v-if="dialog.type === 'user-form'" ref="userFormRef" :model="formData" :rules="rules" label-width="80px">
         <el-form-item label="用户名" prop="username">
@@ -138,8 +138,8 @@
 
         <el-form-item label="状态" prop="status">
           <el-radio-group v-model="formData.status">
-            <el-radio :label="1">正常</el-radio>
-            <el-radio :label="0">禁用</el-radio>
+            <el-radio :value="1">正常</el-radio>
+            <el-radio :value="0">禁用</el-radio>
           </el-radio-group>
         </el-form-item>
         <el-form-item label="头像" prop="avatar">
@@ -241,7 +241,6 @@ watch(dateTimeRange, (newVal) => {
 const dialog = reactive({
   visible: false,
   type: "user-form",
-  width: 800,
   title: "",
 });
 
@@ -379,7 +378,6 @@ const openDialog = async (type: string, id?: number) => {
   } else if (dialog.type === "user-import") {
     // 用户导入弹窗
     dialog.title = "导入用户";
-    dialog.width = 600;
     loadDeptOptions();
   }
 }

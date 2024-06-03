@@ -46,7 +46,7 @@
     </el-card>
 
     <!-- 文件表单弹窗 -->
-    <el-dialog v-model="dialog.visible" :title="dialog.title" width="500px" @close="closeDialog">
+    <el-dialog v-model="dialog.visible" :title="dialog.title" @close="closeDialog">
       <el-form ref="fileFormRef" :model="formData" :rules="rules" label-width="100px">
         <el-form-item label="文件ID" prop="id">
           <el-input v-model="formData.id" disabled placeholder="请输入新的文件名" />

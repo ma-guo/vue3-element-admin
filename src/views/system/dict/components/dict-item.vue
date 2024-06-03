@@ -47,7 +47,7 @@
     </el-card>
 
     <!-- 表单弹窗 -->
-    <el-dialog v-model="dialog.visible" :title="dialog.title" width="500px" @close="closeDialog">
+    <el-dialog v-model="dialog.visible" :title="dialog.title" @close="closeDialog">
       <el-form ref="dataFormRef" :model="formData" :rules="rules" label-width="100px">
         <el-form-item label="字典名称">{{ typeName }}</el-form-item>
         <el-form-item label="字典名称" prop="name">
@@ -61,8 +61,8 @@
         </el-form-item>
         <el-form-item label="状态" prop="status">
           <el-radio-group v-model="formData.status">
-            <el-radio :label="1">正常</el-radio>
-            <el-radio :label="0">停用</el-radio>
+            <el-radio :value="1">正常</el-radio>
+            <el-radio :value="0">停用</el-radio>
           </el-radio-group>
         </el-form-item>
         <el-form-item label="备注" prop="remark">

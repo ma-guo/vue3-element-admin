@@ -54,7 +54,7 @@
     </el-card>
 
     <!-- 角色表单弹窗 -->
-    <el-dialog v-model="dialog.visible" :title="dialog.title" width="500px" @close="closeDialog">
+    <el-dialog v-model="dialog.visible" :title="dialog.title" @close="closeDialog">
       <el-form ref="roleFormRef" :model="formData" :rules="rules" label-width="100px">
         <el-form-item label="角色名称" prop="name">
           <el-input v-model="formData.name" placeholder="请输入角色名称" />
@@ -75,8 +75,8 @@
 
         <el-form-item label="状态" prop="status">
           <el-radio-group v-model="formData.status">
-            <el-radio :label="1">正常</el-radio>
-            <el-radio :label="0">停用</el-radio>
+            <el-radio :value="1">正常</el-radio>
+            <el-radio :value="0">停用</el-radio>
           </el-radio-group>
         </el-form-item>
 
@@ -94,7 +94,7 @@
     </el-dialog>
 
     <!-- 分配菜单弹窗  -->
-    <el-dialog v-model="menuDialogVisible" :title="'【' + checkedRole.name + '】权限分配'" width="800px">
+    <el-dialog v-model="menuDialogVisible" :title="'【' + checkedRole.name + '】权限分配'">
       <el-scrollbar v-loading="loading" max-height="600px">
         <el-tree ref="menuRef" node-key="value" show-checkbox :data="menuList" :default-expand-all="true">
           <template #default="{ data }">

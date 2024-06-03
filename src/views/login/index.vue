@@ -8,7 +8,7 @@
     <!-- 登录表单 -->
     <el-card class="!border-none !bg-transparent !rounded-4% w-100 <sm:w-85">
       <div class="text-center relative">
-        <h2>{{ defaultSettings.title }}</h2>
+        <h2>{{ $t('title') }}</h2>
         <el-tag class="ml-2 absolute-rt">{{ defaultSettings.version }}</el-tag>
       </div>
 
@@ -47,7 +47,7 @@
 
         <!-- 登录按钮 -->
         <el-button :loading="loading" type="primary" size="large" class="w-full" @click.prevent="handleLogin">{{
-        $t("login.login") }}
+          $t("login.login") }}
         </el-button>
       </el-form>
     </el-card>
@@ -57,7 +57,7 @@
       <p>
         Copyright © 2021 - 2024 {{ $t('login.company') }} {{ $t('login.copyright') }}
       </p>
-      <p>皖ICP备20006496号-3</p>
+      <p>{{ $t('icp') }}</p>
     </div>
   </div>
 </template>

@@ -53,7 +53,7 @@
     </el-row>
 
     <!-- 弹窗 -->
-    <el-dialog v-model="dialog.visible" :title="dialog.title" :width="dialog.width" append-to-body @close="closeDialog">
+    <el-dialog v-model="dialog.visible" :title="dialog.title" append-to-body @close="closeDialog">
       <!-- 用户新增/编辑表单 -->
       <el-form v-if="dialog.type === 'user-form'" ref="userFormRef" :model="formData" :rules="rules" label-width="80px">
         <el-form-item label="配置名" prop="name">
@@ -79,7 +79,7 @@
         </div>
       </template>
     </el-dialog>
-    <el-dialog v-model="venderChangeTipsVisible" title="切换确认" width="500" align-center>
+    <el-dialog v-model="venderChangeTipsVisible" title="切换确认" align-center>
       <span>切换服务商前请确认参数已配置正确, 同时旧参数勿删除,
         否则无法操作旧文件。 请谨慎操作</span>
       <template #footer>

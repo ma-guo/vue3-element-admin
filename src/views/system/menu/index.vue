@@ -23,9 +23,9 @@
 
       <el-table v-loading="loading" :data="menuList" highlight-current-row row-key="id" :expand-row-keys="['1']"
         @row-click="onRowClick" :tree-props="{
-        children: 'children',
-        hasChildren: 'hasChildren',
-      }">
+          children: 'children',
+          hasChildren: 'hasChildren',
+        }">
         <el-table-column label="菜单名称" min-width="200">
           <template #default="scope">
             <svg-icon :icon-class="scope.row.icon" />
@@ -103,7 +103,7 @@
         </el-form-item>
 
         <el-form-item v-if="formData.type == MenuTypeEnum.CATALOG ||
-        formData.type == MenuTypeEnum.MENU
+          formData.type == MenuTypeEnum.MENU
         " label="路由路径" prop="path">
           <el-input v-if="formData.type == MenuTypeEnum.CATALOG" v-model="formData.path" placeholder="system" />
           <el-input v-else v-model="formData.path" placeholder="user" />
@@ -119,8 +119,8 @@
 
         <el-form-item v-if="formData.type !== MenuTypeEnum.BUTTON" prop="visible" label="显示状态">
           <el-radio-group v-model="formData.visible">
-            <el-radio :label="1">显示</el-radio>
-            <el-radio :label="0">隐藏</el-radio>
+            <el-radio :value="1">显示</el-radio>
+            <el-radio :value="0">隐藏</el-radio>
           </el-radio-group>
         </el-form-item>
 
@@ -138,15 +138,15 @@
           </template>
 
           <el-radio-group v-model="formData.alwaysShow">
-            <el-radio :label="1">是</el-radio>
-            <el-radio :label="0">否</el-radio>
+            <el-radio :value="1">是</el-radio>
+            <el-radio :value="0">否</el-radio>
           </el-radio-group>
         </el-form-item>
 
         <el-form-item v-if="formData.type === MenuTypeEnum.MENU" label="是否缓存">
           <el-radio-group v-model="formData.keepAlive">
-            <el-radio :label="1">是</el-radio>
-            <el-radio :label="0">否</el-radio>
+            <el-radio :value="1">是</el-radio>
+            <el-radio :value="0">否</el-radio>
           </el-radio-group>
         </el-form-item>
 

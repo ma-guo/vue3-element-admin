@@ -1,5 +1,6 @@
 export default {
   title: 'vue3-element-admin',
+  icp: '皖ICP备20006496号-3',
   // 路由国际化
   route: {
     dashboard: "Dashboard",

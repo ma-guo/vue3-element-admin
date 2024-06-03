@@ -1,12 +1,7 @@
 <template>
   <el-config-provider :locale="locale" :size="size">
     <!-- 开启水印 -->
-    <el-watermark
-      v-if="watermarkEnabled"
-      :font="{ color: fontColor }"
-      :content="watermarkContent"
-      class="wh-full"
-    >
+    <el-watermark v-if="watermarkEnabled" :font="{ color: fontColor }" :content="watermarkContent" class="wh-full">
       <router-view />
     </el-watermark>
     <!-- 关闭水印 -->
@@ -35,3 +30,11 @@ const fontColor = computed(() => {
     : "rgba(0, 0, 0, .15)";
 });
 </script>
+
+<style lang="scss">
+.el-dialog {
+  min-width: 360px;
+  max-width: 600px;
+  width: 50wh;
+}
+</style>

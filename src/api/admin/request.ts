@@ -5,33 +5,31 @@ import originRequest from "@/utils/request";
 export const ajax_get = (path: string, data: {}): Promise<any> => {
   return originRequest({
     method: "get",
-    url: "/api/" + path,
+    url: fillApi(path),
     params: data,
   });
-  // return ajax({
-  //   method: "get",
-  //   url: path,
-  //   params: data,
-  // });
 };
 /** post 请求 */
 export const ajax_post = (path: string, data: {}): Promise<any> => {
   return originRequest({
     method: "post",
-    url: "/api" + path,
+    url: fillApi(path),
     data: data,
   });
-  // return ajax({
-  //   method: "post",
-  //   url: path,
-  //   data: data,
-  // });
 };
 
 export const ajax_any = (method: string, path: string, data: {}): Promise<any> => {
   return originRequest({
     method: method,
-    url: "/api" + path,
+    url: fillApi(path),
     data: data,
   });
+};
+
+
+const fillApi = (path: string): string => {
+  if (path.startsWith("/api")) {
+    return path;
+  }
+  return "/api" + path;
 };
