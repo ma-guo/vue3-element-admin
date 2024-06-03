@@ -3,16 +3,8 @@
     <el-tabs type="border-card">
       <el-tab-pane label="Icons">
         <div class="grid">
-          <div
-            v-for="item of svg_icons"
-            :key="item"
-            @click="handleClipboard(generateIconCode(item), $event)"
-          >
-            <el-tooltip
-              effect="dark"
-              :content="generateIconCode(item)"
-              placement="top"
-            >
+          <div v-for="item of svg_icons" :key="item" @click="handleClipboard(generateIconCode(item), $event)">
+            <el-tooltip effect="dark" :content="generateIconCode(item)" placement="top">
               <div class="icon-item">
                 <svg-icon :icon-class="item" />
                 <span>{{ item }}</span>
@@ -23,16 +15,9 @@
       </el-tab-pane>
       <el-tab-pane label="Element-UI Icons">
         <div class="grid">
-          <div
-            v-for="(icon, name) of icons"
-            :key="name"
-            @click="handleClipboard(generateElementIconCode(name), $event)"
-          >
-            <el-tooltip
-              effect="dark"
-              :content="generateElementIconCode(name)"
-              placement="top"
-            >
+          <div v-for="(icon, name) of icons" :key="name"
+            @click="handleClipboard(generateElementIconCode(name), $event)">
+            <el-tooltip effect="dark" :content="generateElementIconCode(name)" placement="top">
               <div class="icon-item">
                 <el-icon :size="20">
                   <component :is="icon" />
@@ -85,17 +70,22 @@ const svg_icons: string[] = [
   "order",
   "password",
   "peoples",
-  "perm",
   "publish",
   "role",
   "security",
   "size",
-  "skill",
   "system",
   "tree",
   "user",
-  "uv",
-  "verify-code",
+  "record",
+  "tag",
+  "calendar",
+  "rule",
+  "dept",
+  "signature",
+  "websocket",
+  "flex",
+  "perm",
 ];
 const icons = ref(ElementPlusIconsVue);
 
