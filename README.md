@@ -11,6 +11,11 @@
   <a target="_blank" href="http://vue3.youlai.tech">👀 在线预览</a> |  <a target="_blank" href="https://juejin.cn/post/7228990409909108793">📖 阅读文档</a>  
 </div>
 
+## 线上 demo
+[admindemo](http://admindemo.zuxing.net/)
+- 用户名 admin
+- 密码 123456
+
 ## 项目简介
 
 [vue3-element-admin](https://github.com/ma-guo/vue3-element-admin) 是基于 Vue3 + Vite5+ TypeScript5 + Element-Plus + Pinia 等主流技术栈构建的免费开源的后台管理前端模板（配套[后端源码 admin-core](https://github.com/ma-guo/admin-core/)）。后端项目建议从 [admin-core-test](https://github.com/ma-guo/admin-core-test) 开始
