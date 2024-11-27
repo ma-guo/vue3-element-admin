@@ -377,6 +377,19 @@ export const setMenusStatus = (data: AdminCore.V1MenusStatusReq): Promise<Rsp<Ad
 };
 
 /**
+ * 菜单分页列表
+ * @path GET /v1/menus/page/
+ * @param keywords string 关键字
+ * @param type number 菜单类型, 忽略本参数
+ * @param pageNum number 页码
+ * @param pageSize number 每页记录数
+ * @returns AdminCore.V1MenusPageRsp
+ */
+export const getMenusPage = (data: AdminCore.V1MenusPageReq): Promise<Rsp<AdminCore.V1MenusPageRsp>> => {
+	return ajax_get("/v1/menus/page/", data);
+};
+
+/**
  * 获取部门列表
  * @path GET /v1/dept/list/
  * @param keyword string 搜索关键词
@@ -704,4 +717,41 @@ export const getVendorForm = (data: AdminCore.V1VendorFormReq): Promise<Rsp<Admi
  */
 export const setVendorUpdate = (data: AdminCore.V1VendorUpdateReq): Promise<Rsp<AdminCore.NoneRsp>> => {
 	return ajax_post("/v1/vendor/update/", data);
+};
+
+/**
+ * API列表
+ * @path GET /v1/api/page/
+ * @param keyword string 路径名称搜索
+ * @param pageNum number 页码
+ * @param pageSize number 每页记录数
+ * @returns AdminCore.V1ApiPageRsp
+ */
+export const getApiPage = (data: AdminCore.V1ApiPageReq): Promise<Rsp<AdminCore.V1ApiPageRsp>> => {
+	return ajax_get("/v1/api/page/", data);
+};
+
+/**
+ * 获取API详情值
+ * @path GET /v1/api/form/
+ * @param id number 配置 id
+ * @returns AdminCore.V1ApiFormRsp
+ */
+export const getApiForm = (data: AdminCore.V1ApiFormReq): Promise<Rsp<AdminCore.V1ApiFormRsp>> => {
+	return ajax_get("/v1/api/form/", data);
+};
+
+/**
+ * 更新配置项
+ * @path POST /v1/api/update/
+ * @param id number 主键
+ * @param method string 方法名
+ * @param name string API名称
+ * @param path string API路径
+ * @param menus number 权限菜单按钮ID列表
+ * @param remark string 备注
+ * @returns AdminCore.NoneRsp
+ */
+export const setApiUpdate = (data: AdminCore.V1ApiUpdateReq): Promise<Rsp<AdminCore.NoneRsp>> => {
+	return ajax_post("/v1/api/update/", data);
 };

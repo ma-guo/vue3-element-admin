@@ -74,6 +74,20 @@ declare namespace AdminCore {
 	}
 
 	/**
+	 * 菜单视图对象
+	 *
+	 * 成员包括 id, name, perm
+	 */
+	interface V1MenuTiny {
+		/** 菜单ID */
+		id: number;
+		/** 菜单名称 */
+		name: string;
+		/** 按钮权限标识 */
+		perm: string;
+	}
+
+	/**
 	 * 登录请求参数
 	 *
 	 * 成员包括 username, password, captchaKey, captchaCode
@@ -758,6 +772,34 @@ declare namespace AdminCore {
 	}
 
 	/**
+	 * 菜单列表请求
+	 *
+	 * 成员包括 keywords, type, pageNum, pageSize
+	 */
+	interface V1MenusPageReq {
+		/** 关键字 */
+		keywords: string;
+		/** 菜单类型, 忽略本参数 取值范围及含义: 1 - MENU; 2 - CATALOG; 3 - EXTLINK; 4 - BUTTON; */
+		type: number;
+		/** 页码 */
+		pageNum: number;
+		/** 每页记录数 */
+		pageSize: number;
+	}
+
+	/**
+	 * 菜单列表响应
+	 *
+	 * 成员包括 items, total
+	 */
+	interface V1MenusPageRsp {
+		/** 菜单列表 */
+		items: V1MenuTiny[];
+		/** 总记录数 */
+		total: number;
+	}
+
+	/**
 	 * 部门信息
 	 *
 	 * 成员包括 id, parentId, name, sort, status, createTime, updateTime, children
@@ -1273,6 +1315,88 @@ declare namespace AdminCore {
 		key: string;
 		/** 配置值 */
 		value: string;
+		/** 备注 */
+		remark: string;
+	}
+
+	/** 成员包括 id, method, name, path, menus, remark, updateTime */
+	interface V1ApiItem {
+		/** 主键 */
+		id: number;
+		/** 请求方法 */
+		method: string;
+		/** API名称 */
+		name: string;
+		/** API路径 */
+		path: string;
+		/** API 菜单列表 */
+		menus: string[];
+		/** 备注 */
+		remark: string;
+		/** 更新时间 */
+		updateTime: string;
+	}
+
+	/** 成员包括 keyword, pageNum, pageSize */
+	interface V1ApiPageReq {
+		/** 路径名称搜索 */
+		keyword: string;
+		/** 页码 */
+		pageNum: number;
+		/** 每页记录数 */
+		pageSize: number;
+	}
+
+	/**
+	 * 分页获取API列表
+	 *
+	 * 成员包括 items, button, total
+	 */
+	interface V1ApiPageRsp {
+		/** 列表 */
+		items: V1ApiItem[];
+		/** 按钮类型 */
+		button: number;
+		/** 总记录数 */
+		total: number;
+	}
+
+	/** 成员包括 id */
+	interface V1ApiFormReq {
+		/** 配置 id */
+		id: number;
+	}
+
+	/** 成员包括 id, method, name, path, menus, remark, methods */
+	interface V1ApiFormRsp {
+		/** 主键 */
+		id: number;
+		/** 请求方法 */
+		method: string;
+		/** API名称 */
+		name: string;
+		/** API路径 */
+		path: string;
+		/** API 菜单列表 */
+		menus: V1MenuTiny[];
+		/** 备注 */
+		remark: string;
+		/** 方法列表 */
+		methods: string[];
+	}
+
+	/** 成员包括 id, method, name, path, menus, remark */
+	interface V1ApiUpdateReq {
+		/** 主键 */
+		id: number;
+		/** 方法名 */
+		method: string;
+		/** API名称 */
+		name: string;
+		/** API路径 */
+		path: string;
+		/** 权限菜单按钮ID列表 */
+		menus: number[];
 		/** 备注 */
 		remark: string;
 	}
