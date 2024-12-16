@@ -3,17 +3,11 @@
     <template v-if="!isMobile">
       <!--全屏 -->
       <div class="setting-item" @click="toggle">
-        <svg-icon
-          :icon-class="isFullscreen ? 'fullscreen-exit' : 'fullscreen'"
-        />
+        <svg-icon :icon-class="isFullscreen ? 'fullscreen-exit' : 'fullscreen'" />
       </div>
 
       <!-- 布局大小 -->
-      <el-tooltip
-        :content="$t('sizeSelect.tooltip')"
-        effect="dark"
-        placement="bottom"
-      >
+      <el-tooltip :content="$t('sizeSelect.tooltip')" effect="dark" placement="bottom">
         <size-select class="setting-item" />
       </el-tooltip>
 
@@ -24,18 +18,12 @@
     <!-- 用户头像 -->
     <el-dropdown class="setting-item" trigger="click">
       <div class="flex-center h100% p10px">
-        <img
-          :src="userStore.user.avatar + '?imageView2/1/w/80/h/80'"
-          class="rounded-full mr-10px w24px w24px"
-        />
+        <img :src="userStore.user.avatar" class="rounded-full mr-10px w24px w24px" />
         <span>{{ userStore.user.username }}</span>
       </div>
       <template #dropdown>
         <el-dropdown-menu>
-          <a
-            target="_blank"
-            href="https://github.com/ma-guo/vue3-element-admin"
-          >
+          <a target="_blank" href="https://github.com/ma-guo/vue3-element-admin">
             <el-dropdown-item>{{ $t("navbar.gitee") }}</el-dropdown-item>
           </a>
           <a target="_blank" href="https://juejin.cn/post/7228990409909108793">
@@ -116,6 +104,7 @@ function logout() {
 
 .layout-top,
 .layout-mix {
+
   .setting-item,
   .el-icon {
     color: var(--el-color-white);
