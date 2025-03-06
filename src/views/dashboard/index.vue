@@ -7,10 +7,7 @@
       <el-row justify="space-between">
         <el-col :span="18" :xs="24">
           <div class="flex h-full items-center">
-            <img
-              class="w-20 h-20 mr-5 rounded-full"
-              :src="userStore.user.avatar + '?imageView2/1/w/80/h/80'"
-            />
+            <img class="w-20 h-20 mr-5 rounded-full" :src="userStore.user.avatar" />
             <div>
               <p>{{ greetings }}</p>
               <p class="text-sm text-gray">
@@ -22,11 +19,7 @@
 
         <el-col :span="6" :xs="24">
           <div class="flex h-full items-center justify-around">
-            <el-statistic
-              v-for="item in statisticData"
-              :key="item.key"
-              :value="item.value"
-            >
+            <el-statistic v-for="item in statisticData" :key="item.key" :value="item.value">
               <template #title>
                 <div class="flex items-center">
                   <svg-icon :icon-class="item.iconClass" size="20px" />
@@ -42,19 +35,13 @@
 
     <!-- 数据卡片 -->
     <el-row :gutter="10" class="mt-3">
-      <el-col
-        :xs="24"
-        :sm="12"
-        :lg="6"
-        v-for="(item, index) in cardData"
-        :key="index"
-      >
+      <el-col :xs="24" :sm="12" :lg="6" v-for="(item, index) in cardData" :key="index">
         <el-card shadow="never">
           <template #header>
             <div class="flex items-center justify-between">
               <span class="text-[var(--el-text-color-secondary)]">{{
                 item.title
-              }}</span>
+                }}</span>
               <el-tag :type="item.tagType">
                 {{ item.tagText }}
               </el-tag>
@@ -68,9 +55,7 @@
             <svg-icon :icon-class="item.iconClass" size="2em" />
           </div>
 
-          <div
-            class="flex items-center justify-between mt-5 text-sm text-[var(--el-text-color-secondary)]"
-          >
+          <div class="flex items-center justify-between mt-5 text-sm text-[var(--el-text-color-secondary)]">
             <span> {{ item.dataDesc }} </span>
             <span> {{ Math.round(item.count * 15) }} </span>
           </div>
@@ -80,21 +65,9 @@
 
     <!-- Echarts 图表 -->
     <el-row :gutter="10" class="mt-3">
-      <el-col
-        :xs="24"
-        :sm="12"
-        :lg="8"
-        class="mb-2"
-        v-for="item in chartData"
-        :key="item"
-      >
-        <component
-          :is="chartComponent(item)"
-          :id="item"
-          height="400px"
-          width="100%"
-          class="bg-[var(--el-bg-color-overlay)]"
-        />
+      <el-col :xs="24" :sm="12" :lg="8" class="mb-2" v-for="item in chartData" :key="item">
+        <component :is="chartComponent(item)" :id="item" height="400px" width="100%"
+          class="bg-[var(--el-bg-color-overlay)]" />
       </el-col>
     </el-row>
   </div>

@@ -14,9 +14,7 @@
     </div>
 
     <el-card shadow="never" class="table-container">
-      <el-table ref="dataTableRef" v-loading="loading" :data="fileItems" highlight-current-row border
-        @selection-change="handleSelectionChange">
-        <el-table-column type="selection" width="55" align="center" />
+      <el-table ref="dataTableRef" v-loading="state.loading" :data="fileItems" highlight-current-row border>
         <el-table-column label="ID" prop="id" width="60" align="center" />
         <el-table-column label="文件名" prop="name" min-width="100" />
         <el-table-column label="文件路径" prop="url" />
@@ -41,12 +39,12 @@
         </el-table-column>
       </el-table>
 
-      <pagination v-if="total > 0" v-model:total="total" v-model:page="queryParams.pageNum"
+      <pagination v-if="state.total > 0" v-model:total="state.total" v-model:page="queryParams.pageNum"
         v-model:limit="queryParams.pageSize" @pagination="handleQuery" />
     </el-card>
 
     <!-- 文件表单弹窗 -->
-    <el-dialog v-model="dialog.visible" :title="dialog.title" @close="closeDialog">
+    <el-dialog v-model="state.visible" :title="state.title" @close="closeDialog">
       <el-form ref="fileFormRef" :model="formData" :rules="rules" label-width="100px">
         <el-form-item label="文件ID" prop="id">
           <el-input v-model="formData.id" disabled placeholder="请输入新的文件名" />
@@ -80,9 +78,12 @@ defineOptions({
 const queryFormRef = ref(ElForm);
 const fileFormRef = ref(ElForm);
 
-const loading = ref(false);
-const ids = ref<number[]>([]);
-const total = ref(0);
+const state = reactive({
+  total: 0,
+  loading: false,
+  title: '',
+  visible: false,
+});
 
 const queryParams = reactive<AdminCore.V1FilePageReq>({
   pageNum: 1,
@@ -93,10 +94,6 @@ const queryParams = reactive<AdminCore.V1FilePageReq>({
 
 const fileItems = ref<AdminCore.V1FileItem[]>();
 
-const dialog = reactive({
-  title: "",
-  visible: false,
-});
 
 const formData = reactive<AdminCore.V1RolesAddReq>({
   id: 0,
@@ -113,12 +110,12 @@ const rules = reactive({
 
 /** 查询 */
 const handleQuery = async () => {
-  loading.value = true;
+  state.loading = true;
   const rsp = await getFilesPage(queryParams);
-  loading.value = false;
+  state.loading = false;
   if (rsp.result == 0) {
     fileItems.value = rsp.data.items;
-    total.value = rsp.data.total;
+    state.total = rsp.data.total;
   }
 }
 /** 重置查询 */
@@ -128,15 +125,11 @@ function resetQuery() {
   handleQuery();
 }
 
-/** 行checkbox 选中事件 */
-function handleSelectionChange(selection: any) {
-  ids.value = selection.map((item: any) => item.id);
-}
 
 /** 打开角色表单弹窗 */
 const openDialog = async (roleId: number) => {
-  dialog.visible = true;
-  dialog.title = "修改文件名";
+  state.visible = true;
+  state.title = "修改文件名";
   const rsp = await getFilesForm({ id: roleId });
   if (rsp.result == 0) {
     Object.assign(formData, rsp.data);
@@ -147,18 +140,18 @@ const openDialog = async (roleId: number) => {
 function handleSubmit() {
   fileFormRef.value.validate(async (valid: any) => {
     if (valid) {
-      loading.value = true;
+      state.loading = true;
       const roleId = formData.id;
       if (roleId) {
         const rsp = await setFilesUpdate(formData);
-        loading.value = false
+        state.loading = false;
         if (rsp.result == 0) {
           ElMessage.success("修改成功");
           closeDialog();
           resetQuery();
         }
       } else {
-        loading.value = false;
+        state.loading = false;
       }
     }
   });
@@ -166,7 +159,7 @@ function handleSubmit() {
 
 /** 关闭表单弹窗 */
 function closeDialog() {
-  dialog.visible = false;
+  state.visible = false;
   resetForm();
 }
 
@@ -187,9 +180,9 @@ function handleDelete(filePath: string) {
     cancelButtonText: "取消",
     type: "warning",
   }).then(async () => {
-    loading.value = true;
+    state.loading = true;
     const rsp = await setFilesDelete({ filePath });
-    loading.value = false;
+    state.loading = false;
     if (rsp.result == 0) {
       ElMessage.success("删除成功");
       resetQuery();
