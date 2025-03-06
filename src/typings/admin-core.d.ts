@@ -4,6 +4,132 @@
 
 declare namespace AdminCore {
 
+	// gen enum const
+
+	/**
+	* 通用状态枚举 
+	*
+	* 成员包括 Enable(1), Disable(0)
+	*/
+	enum CommStatusEnum {
+		/** 启用 */
+		Enable = 1,
+		/** 停用 */
+		Disable = 0,
+	}
+
+	/**
+	* 用户性别定义 
+	*
+	* 成员包括 Unknow(0), Man(1), Woman(2)
+	*/
+	enum GenderEnum {
+		/** 未知 */
+		Unknow = 0,
+		/** 男 */
+		Man = 1,
+		/** 女 */
+		Woman = 2,
+	}
+
+	/**
+	* 数据权限 
+	*
+	* 成员包括 All(0), DeptSub(1), Dept(2), Self(3)
+	*/
+	enum DataScopeEnum {
+		/** 所有数据 */
+		All = 0,
+		/** 部门及子部门数据 */
+		DeptSub = 1,
+		/** 本部门数据 */
+		Dept = 2,
+		/** 本人数据 */
+		Self = 3,
+	}
+
+	/**
+	* 菜单状态枚举 
+	*
+	* 成员包括 Visible(1), InVisible(0)
+	*/
+	enum MenuStatusEnum {
+		/** 显示 */
+		Visible = 1,
+		/** 隐藏 */
+		InVisible = 0,
+	}
+
+	/**
+	* 菜单状态枚举 
+	*
+	* 成员包括 NULL("NULL"), CATALOG("CATALOG"), MENU("MENU"), BUTTON("BUTTON"), EXTLINK("EXTLINK")
+	*/
+	enum MenuTypeEnum {
+		/** 无类型 */
+		NULL = "NULL",
+		/** 目录 */
+		CATALOG = "CATALOG",
+		/** 菜单 */
+		MENU = "MENU",
+		/** 按钮 */
+		BUTTON = "BUTTON",
+		/** 外链 */
+		EXTLINK = "EXTLINK",
+	}
+
+	/**
+	* 菜单类型组 
+	*
+	* 成员包括 MENU(1), CATALOG(2), EXTLINK(3), BUTTON(4)
+	*/
+	enum MenuTypeGroup {
+		/** MENU */
+		MENU = 1,
+		/** CATALOG */
+		CATALOG = 2,
+		/** EXTLINK */
+		EXTLINK = 3,
+		/** BUTTON */
+		BUTTON = 4,
+	}
+
+	/**
+	* 七牛存储区域 
+	*
+	* 成员包括 Huadong("ZoneHuadong"), Huabei("ZoneHuabei"), Huanan("ZoneHuanan"), Beimei("ZoneBeimei"), Xinjiapo("ZoneXinjiapo"), ZheJiang2("ZoneHuadongZheJiang2")
+	*/
+	enum QiniuZoneEnum {
+		/** 华东机房 */
+		Huadong = "ZoneHuadong",
+		/** 华北机房 */
+		Huabei = "ZoneHuabei",
+		/** 华南机房 */
+		Huanan = "ZoneHuanan",
+		/** 北美机房 */
+		Beimei = "ZoneBeimei",
+		/** 新加坡机房 */
+		Xinjiapo = "ZoneXinjiapo",
+		/** 华东浙江 2 区 */
+		ZheJiang2 = "ZoneHuadongZheJiang2",
+	}
+
+	/**
+	* 文件存储提供商 
+	*
+	* 成员包括 Local("local"), Qiniu("qiniu"), Aliyun("aliyun"), Tencent("tencent")
+	*/
+	enum FileVendorEnum {
+		/** 本机存储 */
+		Local = "local",
+		/** 七牛存储 */
+		Qiniu = "qiniu",
+		/** 阿里云存储 */
+		Aliyun = "aliyun",
+		/** 腾讯云存储 */
+		Tencent = "tencent",
+	}
+
 	// gen model v1
 
 
