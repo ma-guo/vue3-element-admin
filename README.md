@@ -8,7 +8,7 @@
 ![](https://foruda.gitee.com/images/1708618984641188532/a7cca095_716974.png "rainbow.png")
 
 <div align="center">
-  <a target="_blank" href="http://vue3.youlai.tech">👀 在线预览</a> |  <a target="_blank" href="https://juejin.cn/post/7228990409909108793">📖 阅读文档</a>
+  <a target="_blank" href="http://admindemo.zuxing.net/">👀 在线预览</a> |  <a target="_blank" href="http://niuhe.zuxing.net/chapter5/index.html">📖 阅读文档</a>
 </div>
 
 # `niuhe` 教程
