@@ -780,6 +780,8 @@ export const getDocumentPage = (data: AdminCore.DocumentPageReq): Promise<Rsp<Ad
  * 分页查询草稿信息
  * @path GET /v1/document/draft_page/
  * @param doc_id number 文章ID 最小值:1
+ * @param page number 页码 最小值:1
+ * @param size number 每页数量 数值范围:1-50
  * @return AdminCore.DocumentPageRsp
  */
 export const getDocumentDraftPage = (data: AdminCore.DocumentDragePageReq): Promise<Rsp<AdminCore.DocumentPageRsp>> => {
@@ -803,6 +805,8 @@ export const getDocumentForm = (data: AdminCore.DocumentFormReq): Promise<Rsp<Ad
  * @param name string 名称
  * @param markdown string markdown内容
  * @param html string html内容
+ * @param version number 版本
+ * @param url string url
  * @param create_at string 创建时间
  * @param update_at string 更新时间
  * @return AdminCore.DocumentItem
@@ -818,6 +822,8 @@ export const setDocumentAdd = (data: AdminCore.DocumentItem): Promise<Rsp<AdminC
  * @param name string 名称
  * @param markdown string markdown内容
  * @param html string html内容
+ * @param version number 版本
+ * @param url string url
  * @param create_at string 创建时间
  * @param update_at string 更新时间
  * @return AdminCore.DocumentItem

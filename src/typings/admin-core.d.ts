@@ -1544,7 +1544,7 @@ declare namespace AdminCore {
 	/**
 	 * 文章-内容管理
 	 *
-	 * 成员包括 id, name, markdown, html, create_at, update_at
+	 * 成员包括 id, name, markdown, html, version, url, create_at, update_at
 	 */
 	interface DocumentItem {
 		/** id */
@@ -1555,6 +1555,10 @@ declare namespace AdminCore {
 		markdown: string;
 		/** html内容 */
 		html: string;
+		/** 版本 */
+		version: number;
+		/** url */
+		url: string;
 		/** 创建时间 */
 		create_at: string;
 		/** 更新时间 */
@@ -1576,11 +1580,15 @@ declare namespace AdminCore {
 	/**
 	 * 分页查询草稿信息
 	 *
-	 * 成员包括 doc_id
+	 * 成员包括 doc_id, page, size
 	 */
 	interface DocumentDragePageReq {
 		/** 文章ID 最小值:1 */
 		doc_id: number;
+		/** 页码 最小值:1 */
+		page: number;
+		/** 每页数量 数值范围:1-50 */
+		size: number;
 	}
 
 	/**

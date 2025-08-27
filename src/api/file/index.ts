@@ -1,13 +1,12 @@
 import request from "@/utils/request";
 import { AxiosPromise } from "axios";
-import { FileInfo } from "./types";
 
 /**
  * 上传文件
  *
  * @param file
  */
-export function uploadFileApi(file: File): AxiosPromise<FileInfo> {
+export function uploadFileApi(file: File): Promise<Rsp<AdminCore.V1FilesUploadRsp>> {
   const formData = new FormData();
   formData.append("file", file);
   return request({

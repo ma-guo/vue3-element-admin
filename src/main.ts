@@ -1,6 +1,7 @@
 import { createApp } from "vue";
 import App from "./App.vue";
 import router from "@/router";
+import mavonEditor from 'mavon-editor'
 import { setupStore } from "@/store";
 import { setupDirective } from "@/directive";
 import { setupElIcons, setupI18n, setupPermission } from "@/plugins";
@@ -14,6 +15,8 @@ import "@/styles/index.scss";
 import "uno.css";
 import "animate.css";
 
+import 'mavon-editor/dist/css/index.css'
+
 const app = createApp(App);
 // 全局注册 自定义指令(directive)
 setupDirective(app);
@@ -25,4 +28,7 @@ setupElIcons(app);
 setupI18n(app);
 // 注册动态路由
 setupPermission();
+
+app.use(mavonEditor)
+
 app.use(router).mount("#app");
